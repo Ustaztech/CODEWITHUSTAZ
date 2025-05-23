@@ -1,1 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code With Ustaz | Learn Coding & Web Development</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #f8f9fa;
+            --dark-color: #1a1a2e;
+            --code-bg: #282c34;
+        }
 
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .code-font {
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--dark-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+            font-size: 1.5rem;
+        }
+
+        .navbar-brand span {
+            color: var(--primary-color);
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 600;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--dark-color), var(--secondary-color));
+            color: white;
+            padding: 150px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+            opacity: 0.2;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+        }
+
+        .code-snippet {
+            background: var(--code-bg);
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Roboto Mono', monospace;
+            color: #f8f8f2;
+            margin: 20px 0;
+        }
+
+        /* Courses Section */
+        .course-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .course-img {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+        }
+
+        .course-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+
+        /* Testimonials */
+        .testimonial-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '\f10d';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 2rem;
+            color: var(--primary-color);
+            opacity: 0.1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .testimonial-author img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 50px 0 20px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .social-icons a {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            margin-right: 10px;
+            transition: all 0.3s;
+        }
+
+        .social-icons a:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-code me-2"></i>CODE WITH <span>USTAZ</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#courses">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#testimonials">Testimonials</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">Contact</a>
+                    </li>
+                </ul>
+                <a href="#enroll" class="btn btn-outline-light ms-lg-3">Enroll Now</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="home">
+        <div class="container hero-content">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="hero-title">Learn to Code Like a Pro</h1>
+                    <p class="hero-subtitle">Master programming with hands-on projects and expert guidance.</p>
+                    <div class="d-flex gap-3">
+                        <a href="#courses" class="btn btn-primary btn-lg">Explore Courses</a>
+                        <a href="#contact" class="btn btn-outline-light btn-lg">Free Trial</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="code-snippet fade-in">
+                        <span style="color: #f92672;">// Welcome to Code With Ustaz</span><br>
+                        <span style="color: #a6e22e;">function</span> <span style="color: #66d9ef;">learnToCode</span>() {<br>
+                        &nbsp;&nbsp;<span style="color: #a6e22e;">const</span> <span style="color: #fd971f;">success</span> = <span style="color: #e6db74;">"You will master coding!"</span>;<br>
+                        &nbsp;&nbsp;<span style="color: #f92672;">return</span> success;<br>
+                        }<br>
+                        <br>
+                        <span style="color: #66d9ef;">learnToCode</span>(); <span style="color: #75715e;">// Start your journey today!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="py-5 bg-light" id="courses">
+        <div class="container py-5">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8 text-center">
+                    <h2 class="fw-bold mb-4">Our Coding Courses</h2>
+                    <p class="text-muted">Learn in-demand skills with project-based curriculum.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="course-card">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1528&q=80" alt="Web Development" class="course-img">
+                            <span class="course-badge">Beginner</span>
+                        </div>
+                        <div class="p-4">
+                            <h4>Full-Stack Web Development</h4>
+                            <p class="text-muted">HTML, CSS, JavaScript, React, Node.js, MongoDB</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-primary fw-bold">$99/month</span>
+                                <button class="btn btn-sm btn-outline-primary" onclick="openCourseModal('web-dev')">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="course-card">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Python" class="course-img">
+                            <span class="course-badge">Intermediate</span>
+                        </div>
+                        <div class="p-4">
+                            <h4>Python & Data Science</h4>
+                            <p class="text-muted">Python, Pandas, NumPy, Matplotlib, Machine Learning</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-primary fw-bold">$89/month</span>
+                                <button class="btn btn-sm btn-outline-primary" onclick="openCourseModal('python')">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="course-card">
+                        <div class="position-relative">
+                            <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Mobile App" class="course-img">
+                            <span class="course-badge">Advanced</span>
+                        </div>
+                        <div class="p-4">
+                            <h4>Mobile App Development</h4>
+                            <p class="text-muted">Flutter, Dart, Firebase, REST APIs</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-primary fw-bold">$109/month</span>
+                                <button class="btn btn-sm btn-outline-primary" onclick="openCourseModal('mobile')">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="#" class="btn btn-primary">View All Courses</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="py-5" id="about">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <h2 class="fw-bold mb-4">Why Learn With Us?</h2>
+                    <p class="lead">Practical, project-based learning from industry experts.</p>
+                    <p>At <strong>Code With Ustaz</strong>, we focus on real-world applications of programming. Our instructors are experienced developers who teach you how to build actual projects, not just theory.</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> Hands-on coding exercises</li>
+                        <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> 1-on-1 mentorship</li>
+                        <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> Career support & job placement</li>
+                        <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> Flexible learning schedule</li>
+                    </ul>
+                    <a href="#contact" class="btn btn-primary mt-3">Get Started</a>
+                </div>
+                <div class="col-lg-6">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" alt="Coding Class" class="img-fluid rounded shadow-lg">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-5 bg-light" id="testimonials">
+        <div class="container py-5">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8 text-center">
+                    <h2 class="fw-bold mb-4">What Our Students Say</h2>
+                    <p class="text-muted">Success stories from our alumni.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="testimonial-card">
+                        <p>"The Full-Stack course helped me land my first developer job. The projects were exactly what employers wanted to see!"</p>
+                        <div class="testimonial-author">
+                            <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Aisha">
+                            <div>
+                                <h6 class="mb-0">Aisha Mohammed</h6>
+                                <small class="text-muted">Junior Developer</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="testimonial-card">
+                        <p>"I went from zero coding experience to building my own apps. The instructors explain complex topics clearly."</p>
+                        <div class="testimonial-author">
+                            <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Omar">
+                            <div>
+                                <h6 class="mb-0">Omar Ahmed</h6>
+                                <small class="text-muted">Freelance Developer</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="testimonial-card">
+                        <p>"The Python course gave me the skills to automate tasks at work, saving me hours every week."</p>
+                        <div class="testimonial-author">
+                            <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="Fatima">
+                            <div>
+                                <h6 class="mb-0">Fatima Ali</h6>
+                                <small class="text-muted">Data Analyst</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enrollment CTA -->
+    <section class="py-5 bg-primary text-white" id="enroll">
+        <div class="container py-5">
+            <div class="row align-items-center">
+                <div class="col-lg-8 mb-4 mb-lg-0">
+                    <h2 class="mb-3">Ready to Start Your Coding Journey?</h2>
+                    <p class="mb-0">Join thousands of students who transformed their careers with coding.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a href="#" class="btn btn-light btn-lg me-2">Enroll Now</a>
+                    <a href="#" class="btn btn-outline-light btn-lg">Free Trial</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-5" id="contact">
+        <div class="container py-5">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8 text-center">
+                    <h2 class="fw-bold mb-4">Contact Us</h2>
+                    <p class="text-muted">Have questions? Get in touch with our team.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-5 mb-5 mb-lg-0">
+                    <div class="d-flex mb-4">
+                        <div class="me-4 text-primary">
+                            <i class="fas fa-map-marker-alt fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5>Location</h5>
+                            <p class="text-muted">123 Code Street, Tech District, Cairo, Egypt</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-4">
+                        <div class="me-4 text-primary">
+                            <i class="fas fa-phone-alt fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5>Phone</h5>
+                            <p class="text-muted">+20 123 456 7890</p>
+                        </div>
+                    </div>
+                    <div class="d-flex mb-4">
+                        <div class="me-4 text-primary">
+                            <i class="fas fa-envelope fa-2x"></i>
+                        </div>
+                        <div>
+                            <h5>Email</h5>
+                            <p class="text-muted">contact@codewithustaz.com</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <form id="contactForm">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control mb-3" placeholder="Your Name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="email" class="form-control mb-3" placeholder="Your Email" required>
+                            </div>
+                        </div>
+                        <input type="text" class="form-control mb-3" placeholder="Subject">
+                        <textarea class="form-control mb-3" rows="5" placeholder="Your Message" required></textarea>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-5 mb-lg-0">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none mb-4">
+                        <i class="fas fa-code me-2 fa-2x"></i>
+                        <span class="fs-4 fw-bold">CODE WITH <span class="text-primary">USTAZ</span></span>
+                    </a>
+                    <p class="text-muted">Empowering the next generation of developers through quality coding education.</p>
+                    <div class="social-icons mt-4">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
+                    <h5 class="text-white mb-4">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#home">Home</a></li>
+                        <li class="mb-2"><a href="#courses">Courses</a></li>
+                        <li class="mb-2"><a href="#about">About</a></li>
+                        <li class="mb-2"><a href="#testimonials">Testimonials</a></li>
+                        <li class="mb-2"><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
+                    <h5 class="text-white mb-4">Courses</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#">Web Development</a></li>
+                        <li class="mb-2"><a href="#">Python</a></li>
+                        <li class="mb-2"><a href="#">Mobile Apps</a></li>
+                        <li class="mb-2"><a href="#">Data Science</a></li>
+                        <li class="mb-2"><a href="#">Algorithms</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h5 class="text-white mb-4">Newsletter</h5>
+                    <p class="text-muted">Subscribe for coding tips and course updates.</p>
+                    <form class="mt-4">
+                        <div class="input-group">
+                            <input type="email" class="form-control" placeholder="Your Email" required>
+                            <button class="btn btn-primary" type="submit">Subscribe</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-12 text-center">
+                    <p class="text-muted mb-0">&copy; 2023 Code With Ustaz. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Course Modal -->
+    <div class="modal fade" id="courseModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Course Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- Content loaded via JavaScript -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <a href="#enroll" class="btn btn-primary">Enroll Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // Course Modal Data
+        const courses = {
+            'web-dev': {
+                title: 'Full-Stack Web Development',
+                description: 'Master front-end and back-end development with this comprehensive course. Build real-world projects and deploy them online.',
+                topics: [
+                    'HTML5 & CSS3 Fundamentals',
+                    'JavaScript (ES6+)',
+                    'React.js for Frontend',
+                    'Node.js & Express for Backend',
+                    'MongoDB Database',
+                    'RESTful APIs',
+                    'Authentication & Security',
+                    'Deployment (Heroku, Netlify)'
+                ],
+                duration: '6 Months',
+                projects: '10+ Projects'
+            },
+            'python': {
+                title: 'Python & Data Science',
+                description: 'Learn Python programming and apply it to data analysis, visualization, and machine learning.',
+                topics: [
+                    'Python Syntax & Basics',
+                    'Object-Oriented Programming',
+                    'Pandas for Data Analysis',
+                    'NumPy for Scientific Computing',
+                    'Matplotlib & Seaborn for Visualization',
+                    'Introduction to Machine Learning',
+                    'Web Scraping with BeautifulSoup',
+                    'Automation Scripts'
+                ],
+                duration: '4 Months',
+                projects: '8+ Projects'
+            },
+            'mobile': {
+                title: 'Mobile App Development',
+                description: 'Build cross-platform mobile apps with Flutter and Dart. Publish your apps on Google Play and App Store.',
+                topics: [
+                    'Dart Programming Language',
+                    'Flutter Widgets & UI',
+                    'State Management',
+                    'Firebase Integration',
+                    'REST API Consumption',
+                    'Local Storage (SQLite)',
+                    'App Publishing',
+                    'Performance Optimization'
+                ],
+                duration: '5 Months',
+                projects: '6+ Apps'
+            }
+        };
+
+        // Open Course Modal
+        function openCourseModal(courseId) {
+            const course = courses[courseId];
+            document.getElementById('modalTitle').textContent = course.title;
+            
+            let modalContent = `
+                <p class="lead">${course.description}</p>
+                <h6 class="mt-4">Course Topics:</h6>
+                <ul class="mb-4">
+                    ${course.topics.map(topic => `<li>${topic}</li>`).join('')}
+                </ul>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Duration:</strong> ${course.duration}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Projects:</strong> ${course.projects}</p>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('modalBody').innerHTML = modalContent;
+            
+            const modal = new bootstrap.Modal(document.getElementById('courseModal'));
+            modal.show();
+        }
+
+        // Form Submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Thank you for your message! We will contact you soon.');
+            this.reset();
+        });
+
+        // Scroll Animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            fadeElements.forEach(el => {
+                el.style.opacity = 0;
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
