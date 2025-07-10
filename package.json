@@ -1,0 +1,22 @@
+{
+  "name": "code-with-ustaz",
+  "version": "1.0.0",
+  "description": "Code With Ustaz - Learn Coding & Web Development",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx live-server --port=3000 --open=index.html",
+    "start": "npx live-server --port=3000 --open=index.html",
+    "build": "echo 'Static site - no build needed'"
+  },
+  "keywords": [
+    "coding",
+    "education",
+    "web-development",
+    "programming"
+  ],
+  "author": "YAHAYA ZAID",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
