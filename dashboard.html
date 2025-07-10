@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Code With Ustaz</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --light-color: #f8f9fa;
+            --dark-color: #1a1a2e;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-color);
+        }
+
+        .sidebar {
+            background: linear-gradient(135deg, var(--dark-color), var(--secondary-color));
+            min-height: 100vh;
+            width: 250px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h4 {
+            color: white;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .sidebar-header span {
+            color: var(--primary-color);
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(52, 152, 219, 0.2);
+            color: white;
+        }
+
+        .sidebar-menu i {
+            width: 20px;
+            margin-right: 15px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .main-content.expanded {
+            margin-left: 70px;
+        }
+
+        .top-navbar {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .profile-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .course-header {
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .course-body {
+            padding: 20px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: #e9ecef;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success-color), var(--primary-color));
+            transition: width 0.3s;
+        }
+
+        .bookmark-btn {
+            background: none;
+            border: none;
+            color: #ffc107;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .bookmark-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .bookmark-btn.bookmarked {
+            color: #ff6b35;
+        }
+
+        .toggle-sidebar {
+            background: none;
+            border: none;
+            color: var(--secondary-color);
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .profile-dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .male-avatar {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        .female-avatar {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h4>CODE WITH <span>USTAZ</span></h4>
+        </div>
+        <div class="sidebar-menu">
+            <a href="#" class="active" onclick="showSection('dashboard')">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#" onclick="showSection('courses')">
+                <i class="fas fa-book"></i>
+                <span>My Courses</span>
+            </a>
+            <a href="#" onclick="showSection('progress')">
+                <i class="fas fa-chart-line"></i>
+                <span>Progress</span>
+            </a>
+            <a href="#" onclick="showSection('bookmarks')" id="bookmarksLink">
+                <i class="fas fa-bookmark"></i>
+                <span>Bookmarks</span>
+            </a>
+            <a href="#" onclick="showSection('certificates')">
+                <i class="fas fa-certificate"></i>
+                <span>Certificates</span>
+            </a>
+            <a href="admission.html">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Apply for Admission</span>
+            </a>
+            <a href="ustaz-bot.html">
+                <i class="fas fa-robot"></i>
+                <span>USTAZ BOT</span>
+            </a>
+            <a href="#" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Top Navbar -->
+        <div class="top-navbar">
+            <div class="d-flex align-items-center">
+                <button class="toggle-sidebar me-3" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h5 class="mb-0">Student Dashboard</h5>
+            </div>
+            <div class="profile-section">
+                <div class="profile-dropdown dropdown">
+                    <div class="profile-avatar male-avatar" data-bs-toggle="dropdown" id="profileAvatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#" onclick="showProfile()">
+                            <i class="fas fa-user me-2"></i>View Profile
+                        </a></li>
+                        <li><a class="dropdown-item" href="#">
+                            <i class="fas fa-cog me-2"></i>Settings
+                        </a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" onclick="logout()">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 class="mb-0" id="studentName">John Doe</h6>
+                    <small class="text-muted">Student</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div id="dashboardSection">
+            <div class="dashboard-cards">
+                <div class="dashboard-card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #3498db, #2980b9);">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h5>Enrolled Courses</h5>
+                    <h2 class="text-primary">3</h2>
+                    <p class="text-muted">Active courses</p>
+                </div>
+                <div class="dashboard-card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #27ae60, #2ecc71);">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h5>Overall Progress</h5>
+                    <h2 class="text-success">65%</h2>
+                    <p class="text-muted">Completion rate</p>
+                </div>
+                <div class="dashboard-card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f39c12, #e67e22);">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <h5>Certificates</h5>
+                    <h2 class="text-warning">1</h2>
+                    <p class="text-muted">Earned certificates</p>
+                </div>
+                <div class="dashboard-card">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+                        <i class="fas fa-bookmark"></i>
+                    </div>
+                    <h5>Bookmarks</h5>
+                    <h2 class="text-danger" id="bookmarkCount">5</h2>
+                    <p class="text-muted">Saved lessons</p>
+                </div>
+            </div>
+
+            <h4 class="mb-4">My Courses</h4>
+            <div class="courses-grid" id="coursesGrid">
+                <!-- Courses will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Other sections will be hidden initially -->
+        <div id="coursesSection" style="display: none;">
+            <h4 class="mb-4">My Courses</h4>
+            <div class="courses-grid" id="allCoursesGrid">
+                <!-- All courses will be loaded here -->
+            </div>
+        </div>
+
+        <div id="progressSection" style="display: none;">
+            <h4 class="mb-4">Learning Progress</h4>
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="dashboard-card">
+                        <h5>Progress Overview</h5>
+                        <canvas id="progressChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="dashboard-card">
+                        <h5>Recent Activity</h5>
+                        <div class="activity-list">
+                            <div class="activity-item mb-3">
+                                <i class="fas fa-play-circle text-primary me-2"></i>
+                                <span>Completed JavaScript Basics</span>
+                                <small class="text-muted d-block">2 hours ago</small>
+                            </div>
+                            <div class="activity-item mb-3">
+                                <i class="fas fa-bookmark text-warning me-2"></i>
+                                <span>Bookmarked React Components</span>
+                                <small class="text-muted d-block">1 day ago</small>
+                            </div>
+                            <div class="activity-item mb-3">
+                                <i class="fas fa-certificate text-success me-2"></i>
+                                <span>Earned HTML & CSS Certificate</span>
+                                <small class="text-muted d-block">3 days ago</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="bookmarksSection" style="display: none;">
+            <h4 class="mb-4">My Bookmarks</h4>
+            <div class="row" id="bookmarksList">
+                <!-- Bookmarks will be loaded here -->
+            </div>
+        </div>
+
+        <div id="certificatesSection" style="display: none;">
+            <h4 class="mb-4">My Certificates</h4>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="dashboard-card">
+                        <div class="text-center">
+                            <i class="fas fa-certificate fa-3x text-warning mb-3"></i>
+                            <h5>HTML & CSS Mastery</h5>
+                            <p class="text-muted">Completed on: December 15, 2023</p>
+                            <button class="btn btn-primary" onclick="viewCertificate('html-css')">View Certificate</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Certificate Modal -->
+    <div class="modal fade" id="certificateModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Certificate of Completion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="certificate-design p-4" style="border: 5px solid #3498db; background: linear-gradient(135deg, #f8f9fa, #e9ecef);">
+                        <h2 class="text-primary mb-4">SKILL HUB</h2>
+                        <h4 class="mb-3">Certificate of Completion</h4>
+                        <p class="lead">This is to certify that</p>
+                        <h3 class="text-primary mb-3" id="certificateStudentName">John Doe</h3>
+                        <p>has successfully completed the course</p>
+                        <h4 class="text-secondary mb-3" id="certificateCourseName">HTML & CSS Mastery</h4>
+                        <p class="mb-4" id="certificateComment">with outstanding performance and dedication to learning</p>
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <p><strong>Instructor</strong></p>
+                                <p>Sarah Johnson</p>
+                                <p><em>Digital Signature</em></p>
+                            </div>
+                            <div class="col-6">
+                                <p><strong>Founder</strong></p>
+                                <p>YAHAYA ZAID</p>
+                                <p><em>Digital Signature & Stamp</em></p>
+                            </div>
+                        </div>
+                        <p class="mt-4 text-muted">Date: <span id="certificateDate">December 15, 2023</span></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="downloadCertificate()">Download PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">My Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <div class="profile-avatar male-avatar mx-auto" style="width: 80px; height: 80px; font-size: 30px;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h5 class="mt-3" id="profileName">John Doe</h5>
+                        <p class="text-muted">Student ID: STU001</p>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <p><strong>Email:</strong></p>
+                            <p class="text-muted">john.doe@email.com</p>
+                        </div>
+                        <div class="col-6">
+                            <p><strong>Phone:</strong></p>
+                            <p class="text-muted">+234 123 456 7890</p>
+                        </div>
+                        <div class="col-6">
+                            <p><strong>Gender:</strong></p>
+                            <p class="text-muted">Male</p>
+                        </div>
+                        <div class="col-6">
+                            <p><strong>Joined:</strong></p>
+                            <p class="text-muted">December 1, 2023</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Edit Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Sample data
+        const courses = [
+            {
+                id: 1,
+                title: 'Full-Stack Web Development',
+                progress: 75,
+                enrolled: true,
+                bookmarked: false,
+                icon: 'fas fa-globe',
+                color: 'linear-gradient(135deg, #667eea, #764ba2)'
+            },
+            {
+                id: 2,
+                title: 'Python & Data Science',
+                progress: 45,
+                enrolled: true,
+                bookmarked: true,
+                icon: 'fab fa-python',
+                color: 'linear-gradient(135deg, #3776ab, #ffd43b)'
+            },
+            {
+                id: 3,
+                title: 'Mobile App Development',
+                progress: 20,
+                enrolled: true,
+                bookmarked: false,
+                icon: 'fas fa-mobile-alt',
+                color: 'linear-gradient(135deg, #02569b, #0277bd)'
+            },
+            {
+                id: 4,
+                title: 'Cybersecurity',
+                progress: 0,
+                enrolled: false,
+                bookmarked: true,
+                icon: 'fas fa-shield-alt',
+                color: 'linear-gradient(135deg, #e74c3c, #c0392b)'
+            },
+            {
+                id: 5,
+                title: 'HTML & CSS Mastery',
+                progress: 100,
+                enrolled: true,
+                bookmarked: false,
+                icon: 'fab fa-html5',
+                color: 'linear-gradient(135deg, #e34f26, #1572b6)'
+            }
+        ];
+
+        let bookmarks = [];
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCourses();
+            updateBookmarkCount();
+            
+            // Set random gender for demo
+            const genders = ['male', 'female'];
+            const randomGender = genders[Math.floor(Math.random() * genders.length)];
+            setUserGender(randomGender);
+        });
+
+        function setUserGender(gender) {
+            const avatars = document.querySelectorAll('.profile-avatar');
+            avatars.forEach(avatar => {
+                avatar.className = `profile-avatar ${gender}-avatar`;
+                avatar.innerHTML = gender === 'male' ? '<i class="fas fa-user"></i>' : '<i class="fas fa-user"></i>';
+            });
+        }
+
+        function loadCourses() {
+            const enrolledCourses = courses.filter(course => course.enrolled);
+            const coursesGrid = document.getElementById('coursesGrid');
+            const allCoursesGrid = document.getElementById('allCoursesGrid');
+            
+            // Load enrolled courses for dashboard
+            coursesGrid.innerHTML = enrolledCourses.map(course => createCourseCard(course)).join('');
+            
+            // Load all courses for courses section
+            allCoursesGrid.innerHTML = courses.map(course => createCourseCard(course)).join('');
+        }
+
+        function createCourseCard(course) {
+            const progressColor = course.progress === 0 ? '#e9ecef' : 
+                                course.progress < 50 ? '#f39c12' : 
+                                course.progress < 100 ? '#3498db' : '#27ae60';
+            
+            return `
+                <div class="course-card">
+                    <div class="course-header">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <div class="course-icon me-3" style="background: ${course.color}; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="${course.icon}"></i>
+                                </div>
+                                <h5 class="mb-0">${course.title}</h5>
+                            </div>
+                            <button class="bookmark-btn ${course.bookmarked ? 'bookmarked' : ''}" onclick="toggleBookmark(${course.id})">
+                                <i class="fas fa-bookmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="course-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span>Progress</span>
+                            <span class="fw-bold">${course.progress}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${course.progress}%; background: ${progressColor};"></div>
+                        </div>
+                        <div class="mt-3">
+                            ${course.enrolled ? 
+                                `<button class="btn btn-primary btn-sm me-2" onclick="continueCourse(${course.id})">
+                                    ${course.progress === 0 ? 'Start Course' : 'Continue Learning'}
+                                </button>` :
+                                `<button class="btn btn-outline-primary btn-sm me-2" onclick="enrollCourse(${course.id})">
+                                    Enroll Now - ₦5,000
+                                </button>`
+                            }
+                            <button class="btn btn-outline-secondary btn-sm" onclick="viewCourseDetails(${course.id})">Details</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleBookmark(courseId) {
+            const course = courses.find(c => c.id === courseId);
+            course.bookmarked = !course.bookmarked;
+            
+            if (course.bookmarked) {
+                bookmarks.push(course);
+            } else {
+                bookmarks = bookmarks.filter(b => b.id !== courseId);
+            }
+            
+            loadCourses();
+            updateBookmarkCount();
+            loadBookmarks();
+        }
+
+        function updateBookmarkCount() {
+            const count = courses.filter(c => c.bookmarked).length;
+            document.getElementById('bookmarkCount').textContent = count;
+        }
+
+        function loadBookmarks() {
+            const bookmarkedCourses = courses.filter(c => c.bookmarked);
+            const bookmarksList = document.getElementById('bookmarksList');
+            
+            if (bookmarkedCourses.length === 0) {
+                bookmarksList.innerHTML = '<div class="col-12"><p class="text-muted text-center">No bookmarks yet.</p></div>';
+                return;
+            }
+            
+            bookmarksList.innerHTML = bookmarkedCourses.map(course => `
+                <div class="col-lg-6">
+                    <div class="dashboard-card">
+                        <div class="d-flex align-items-center">
+                            <div class="course-icon me-3" style="background: ${course.color}; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;">
+                                <i class="${course.icon}"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">${course.title}</h6>
+                                <p class="text-muted mb-0">Progress: ${course.progress}%</p>
+                            </div>
+                            <button class="bookmark-btn bookmarked" onclick="toggleBookmark(${course.id})">
+                                <i class="fas fa-bookmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function continueCourse(courseId) {
+            alert(`Continuing course ${courseId}. This would redirect to the course content.`);
+        }
+
+        function enrollCourse(courseId) {
+            alert(`To enroll in this course, please contact us on WhatsApp: 08168985912 or make payment and send proof.`);
+        }
+
+        function viewCourseDetails(courseId) {
+            const course = courses.find(c => c.id === courseId);
+            alert(`Viewing details for: ${course.title}`);
+        }
+
+        function viewCertificate(courseType) {
+            document.getElementById('certificateStudentName').textContent = document.getElementById('studentName').textContent;
+            document.getElementById('certificateCourseName').textContent = 'HTML & CSS Mastery';
+            document.getElementById('certificateComment').textContent = 'with outstanding performance and dedication to learning';
+            document.getElementById('certificateDate').textContent = new Date().toLocaleDateString();
+            
+            const modal = new bootstrap.Modal(document.getElementById('certificateModal'));
+            modal.show();
+        }
+
+        function downloadCertificate() {
+            alert('Certificate download functionality will be implemented. This would generate a PDF certificate.');
+        }
+
+        function showProfile() {
+            const modal = new bootstrap.Modal(document.getElementById('profileModal'));
+            modal.show();
+        }
+
+        function showSection(sectionName) {
+            // Hide all sections
+            const sections = ['dashboardSection', 'coursesSection', 'progressSection', 'bookmarksSection', 'certificatesSection'];
+            sections.forEach(section => {
+                document.getElementById(section).style.display = 'none';
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName + 'Section').style.display = 'block';
+            
+            // Update active menu item
+            document.querySelectorAll('.sidebar-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.closest('a').classList.add('active');
+            
+            // Load section-specific content
+            if (sectionName === 'bookmarks') {
+                loadBookmarks();
+            }
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Mobile responsiveness
+        if (window.innerWidth <= 768) {
+            document.getElementById('sidebar').classList.add('collapsed');
+            document.getElementById('mainContent').classList.add('expanded');
+        }
+    </script>
+</body>
+</html>

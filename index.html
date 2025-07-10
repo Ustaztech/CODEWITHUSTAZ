@@ -19,6 +19,8 @@
             --light-color: #f8f9fa;
             --dark-color: #1a1a2e;
             --code-bg: #282c34;
+            --whatsapp-color: #25d366;
+            --youtube-color: #ff0000;
         }
 
         body {
@@ -49,12 +51,21 @@
         .nav-link {
             color: rgba(255, 255, 255, 0.9) !important;
             font-weight: 600;
-            margin: 0 10px;
+            margin: 0 5px;
             transition: color 0.3s;
+            font-size: 0.9rem;
         }
 
         .nav-link:hover {
             color: var(--primary-color) !important;
+        }
+
+        .whatsapp-link {
+            color: var(--whatsapp-color) !important;
+        }
+
+        .youtube-link {
+            color: var(--youtube-color) !important;
         }
 
         /* Hero Section */
@@ -103,6 +114,25 @@
             margin: 20px 0;
         }
 
+        /* Course Icons */
+        .course-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin: 0 auto 15px;
+        }
+
+        .web-dev-icon { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .python-icon { background: linear-gradient(135deg, #3776ab, #ffd43b); }
+        .mobile-icon { background: linear-gradient(135deg, #02569b, #0277bd); }
+        .cybersecurity-icon { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .html-css-icon { background: linear-gradient(135deg, #e34f26, #1572b6); }
+
         /* Courses Section */
         .course-card {
             border: none;
@@ -135,40 +165,161 @@
             font-weight: 600;
         }
 
-        /* Testimonials */
-        .testimonial-card {
-            background-color: white;
+        .price-tag {
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* YouTube Section */
+        .youtube-card {
+            background: white;
             border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .youtube-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .youtube-thumbnail {
             position: relative;
+            overflow: hidden;
         }
 
-        .testimonial-card::before {
-            content: '\f10d';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
+        .youtube-thumbnail img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .play-button {
             position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 2rem;
-            color: var(--primary-color);
-            opacity: 0.1;
-        }
-
-        .testimonial-author {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 0, 0, 0.9);
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
             display: flex;
             align-items: center;
-            margin-top: 20px;
+            justify-content: center;
+            font-size: 20px;
+            transition: all 0.3s;
         }
 
-        .testimonial-author img {
-            width: 50px;
-            height: 50px;
+        .play-button:hover {
+            background: #ff0000;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        /* About Founder Section */
+        .founder-section {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 80px 0;
+        }
+
+        .founder-image {
+            width: 300px;
+            height: 300px;
             border-radius: 50%;
             object-fit: cover;
-            margin-right: 15px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            margin: 0 auto;
+            display: block;
+        }
+
+        /* Mission & Vision */
+        .mission-vision-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .mission-vision-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .mission-vision-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+            margin: 0 auto 20px;
+        }
+
+        .mission-icon { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .vision-icon { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+
+        /* WhatsApp Community */
+        .whatsapp-section {
+            background: var(--whatsapp-color);
+            color: white;
+            padding: 60px 0;
+        }
+
+        .whatsapp-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            margin: 10px;
+        }
+
+        .whatsapp-btn:hover {
+            background: white;
+            color: var(--whatsapp-color);
+        }
+
+        /* Animated Glowing Background for Auth */
+        .auth-bg {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .auth-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
         }
 
         /* Footer */
@@ -215,6 +366,12 @@
         .fade-in {
             animation: fadeIn 1s ease-out forwards;
         }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5rem; }
+            .nav-link { font-size: 0.8rem; margin: 0 2px; }
+        }
     </style>
 </head>
 <body>
@@ -233,16 +390,26 @@
                         <a class="nav-link" href="#home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#courses">Courses</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="#about">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#testimonials">Testimonials</a>
+                        <a class="nav-link" href="#mission">Mission</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#contact">Contact</a>
+                        <a class="nav-link" href="#vision">Vision</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#courses">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link youtube-link" href="#youtube">
+                            <i class="fab fa-youtube me-1"></i>YouTube Tutorials
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link whatsapp-link" href="#whatsapp">
+                            <i class="fab fa-whatsapp me-1"></i>WhatsApp Community
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="ustaz-bot.html">
@@ -250,7 +417,10 @@
                         </a>
                     </li>
                 </ul>
-                <a href="#enroll" class="btn btn-outline-light ms-lg-3">Enroll Now</a>
+                <div class="d-flex gap-2">
+                    <a href="login.html" class="btn btn-outline-light">Login</a>
+                    <a href="register.html" class="btn btn-primary">Register</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -262,9 +432,9 @@
                 <div class="col-lg-6">
                     <h1 class="hero-title">Learn to Code Like a Pro</h1>
                     <p class="hero-subtitle">Master programming with hands-on projects and expert guidance.</p>
-                    <div class="d-flex gap-3">
+                    <div class="d-flex gap-3 flex-wrap">
                         <a href="#courses" class="btn btn-primary btn-lg">Explore Courses</a>
-                        <a href="#contact" class="btn btn-outline-light btn-lg">Free Trial</a>
+                        <a href="register.html" class="btn btn-outline-light btn-lg">Free Trial</a>
                         <a href="ustaz-bot.html" class="btn btn-success btn-lg">
                             <i class="fas fa-robot me-2"></i>Chat with USTAZ BOT
                         </a>
@@ -285,8 +455,73 @@
         </div>
     </section>
 
+    <!-- About Founder Section -->
+    <section class="founder-section" id="about">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-4 text-center mb-5 mb-lg-0">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Yahaya Zaid" class="founder-image">
+                </div>
+                <div class="col-lg-8">
+                    <h2 class="fw-bold mb-4">About the Founder</h2>
+                    <h3 class="text-warning mb-3">YAHAYA ZAID</h3>
+                    <p class="lead mb-4">Passionate educator and experienced developer dedicated to empowering the next generation of programmers.</p>
+                    <p class="mb-4">With over 8 years of experience in software development and education, Yahaya Zaid founded Code With Ustaz to bridge the gap between theoretical knowledge and practical skills. His mission is to make quality coding education accessible to everyone, regardless of their background.</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check-circle text-warning me-2"></i>Full-Stack Developer</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-warning me-2"></i>Certified Instructor</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-warning me-2"></i>Tech Entrepreneur</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-check-circle text-warning me-2"></i>1000+ Students Trained</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-warning me-2"></i>50+ Projects Completed</li>
+                                <li class="mb-2"><i class="fas fa-check-circle text-warning me-2"></i>Community Builder</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission & Vision Section -->
+    <section class="py-5 bg-light" id="mission">
+        <div class="container py-5">
+            <div class="row justify-content-center mb-5">
+                <div class="col-lg-8 text-center">
+                    <h2 class="fw-bold mb-4">Our Mission & Vision</h2>
+                    <p class="text-muted">Driving the future of coding education in Nigeria and beyond.</p>
+                </div>
+            </div>
+            <div class="row" id="vision">
+                <div class="col-lg-6">
+                    <div class="mission-vision-card">
+                        <div class="mission-icon mission-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h3 class="fw-bold mb-3">Our Mission</h3>
+                        <p>To provide world-class coding education that empowers individuals with practical skills, fostering innovation and creating opportunities for career advancement in the tech industry.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="mission-vision-card">
+                        <div class="mission-vision-icon vision-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <h3 class="fw-bold mb-3">Our Vision</h3>
+                        <p>To become the leading coding education platform in Africa, producing skilled developers who will drive technological advancement and digital transformation across the continent.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Courses Section -->
-    <section class="py-5 bg-light" id="courses">
+    <section class="py-5" id="courses">
         <div class="container py-5">
             <div class="row justify-content-center mb-5">
                 <div class="col-lg-8 text-center">
@@ -297,15 +532,15 @@
             <div class="row">
                 <div class="col-lg-4 col-md-6">
                     <div class="course-card">
-                        <div class="position-relative">
-                            <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1528&q=80" alt="Web Development" class="course-img">
+                        <div class="p-4 text-center">
+                            <div class="course-icon web-dev-icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
                             <span class="course-badge">Beginner</span>
-                        </div>
-                        <div class="p-4">
                             <h4>Full-Stack Web Development</h4>
                             <p class="text-muted">HTML, CSS, JavaScript, React, Node.js, MongoDB</p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-primary fw-bold">$99/month</span>
+                                <span class="price-tag">₦5,000</span>
                                 <button class="btn btn-sm btn-outline-primary" onclick="openCourseModal('web-dev')">Details</button>
                             </div>
                         </div>
@@ -313,15 +548,15 @@
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="course-card">
-                        <div class="position-relative">
-                            <img src="https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Python" class="course-img">
+                        <div class="p-4 text-center">
+                            <div class="course-icon python-icon">
+                                <i class="fab fa-python"></i>
+                            </div>
                             <span class="course-badge">Intermediate</span>
-                        </div>
-                        <div class="p-4">
                             <h4>Python & Data Science</h4>
                             <p class="text-muted">Python, Pandas, NumPy, Matplotlib, Machine Learning</p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-primary fw-bold">$89/month</span>
+                                <span class="price-tag">₦5,000</span>
                                 <button class="btn btn-sm btn-outline-primary" onclick="openCourseModal('python')">Details</button>
                             </div>
                         </div>
@@ -329,115 +564,188 @@
                 </div>
                 <div class="col-lg-4 col-md-6">
                     <div class="course-card">
-                        <div class="position-relative">
-                            <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Mobile App" class="course-img">
+                        <div class="p-4 text-center">
+                            <div class="course-icon mobile-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
                             <span class="course-badge">Advanced</span>
-                        </div>
-                        <div class="p-4">
                             <h4>Mobile App Development</h4>
                             <p class="text-muted">Flutter, Dart, Firebase, REST APIs</p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="text-primary fw-bold">$109/month</span>
+                                <span class="price-tag">₦5,000</span>
                                 <button class="btn btn-sm btn-outline-primary" onclick="openCourseModal('mobile')">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="course-card">
+                        <div class="p-4 text-center">
+                            <div class="course-icon cybersecurity-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <span class="course-badge">Advanced</span>
+                            <h4>Cybersecurity</h4>
+                            <p class="text-muted">Network Security, Ethical Hacking, Penetration Testing</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="price-tag">₦5,000</span>
+                                <button class="btn btn-sm btn-outline-primary" onclick="openCourseModal('cybersecurity')">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="course-card">
+                        <div class="p-4 text-center">
+                            <div class="course-icon html-css-icon">
+                                <i class="fab fa-html5"></i>
+                            </div>
+                            <span class="course-badge">Beginner</span>
+                            <h4>HTML & CSS Mastery</h4>
+                            <p class="text-muted">HTML5, CSS3, Responsive Design, Bootstrap</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="price-tag">₦5,000</span>
+                                <button class="btn btn-sm btn-outline-primary" onclick="openCourseModal('html-css')">Details</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="text-center mt-4">
-                <a href="#" class="btn btn-primary">View All Courses</a>
+                <p class="mb-3">Ready to start learning? Contact us for payment:</p>
+                <a href="https://wa.me/2348168985912" class="btn btn-success me-2">
+                    <i class="fab fa-whatsapp me-2"></i>WhatsApp: 08168985912
+                </a>
+                <button class="btn btn-info" onclick="showPaymentDetails()">Bank Details</button>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
-    <section class="py-5" id="about">
-        <div class="container py-5">
-            <div class="row align-items-center">
-                <div class="col-lg-6 mb-5 mb-lg-0">
-                    <h2 class="fw-bold mb-4">Why Learn With Us?</h2>
-                    <p class="lead">Practical, project-based learning from industry experts.</p>
-                    <p>At <strong>Code With Ustaz</strong>, we focus on real-world applications of programming. Our instructors are experienced developers who teach you how to build actual projects, not just theory.</p>
-                    <ul class="list-unstyled">
-                        <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> Hands-on coding exercises</li>
-                        <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> 1-on-1 mentorship</li>
-                        <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> Career support & job placement</li>
-                        <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> Flexible learning schedule</li>
-                        <li class="mb-3"><i class="fas fa-check-circle text-primary me-2"></i> 24/7 AI assistant (USTAZ BOT)</li>
-                    </ul>
-                    <a href="#contact" class="btn btn-primary mt-3">Get Started</a>
-                </div>
-                <div class="col-lg-6">
-                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" alt="Coding Class" class="img-fluid rounded shadow-lg">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section class="py-5 bg-light" id="testimonials">
+    <!-- YouTube Tutorial Videos Section -->
+    <section class="py-5 bg-light" id="youtube">
         <div class="container py-5">
             <div class="row justify-content-center mb-5">
                 <div class="col-lg-8 text-center">
-                    <h2 class="fw-bold mb-4">What Our Students Say</h2>
-                    <p class="text-muted">Success stories from our alumni.</p>
+                    <h2 class="fw-bold mb-4">
+                        <i class="fab fa-youtube text-danger me-3"></i>YouTube Tutorial Videos
+                    </h2>
+                    <p class="text-muted">Free tutorials to boost your skills and knowledge.</p>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-4">
-                    <div class="testimonial-card">
-                        <p>"The Full-Stack course helped me land my first developer job. The projects were exactly what employers wanted to see!"</p>
-                        <div class="testimonial-author">
-                            <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="Aisha">
-                            <div>
-                                <h6 class="mb-0">Aisha Mohammed</h6>
-                                <small class="text-muted">Junior Developer</small>
+                <div class="col-lg-4 col-md-6">
+                    <div class="youtube-card">
+                        <div class="youtube-thumbnail">
+                            <img src="https://img.youtube.com/vi/SSqPsSMEiCI/maxresdefault.jpg" alt="ChatGPT Pro Tutorial">
+                            <div class="play-button" onclick="openYouTube('SSqPsSMEiCI')">
+                                <i class="fas fa-play"></i>
                             </div>
+                        </div>
+                        <div class="p-3">
+                            <h5>UNLOCK ACCESS TO CHATGPT PRO FOR FREE</h5>
+                            <p class="text-muted small">Learn how to access ChatGPT Pro features without paying.</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="testimonial-card">
-                        <p>"I went from zero coding experience to building my own apps. The instructors explain complex topics clearly."</p>
-                        <div class="testimonial-author">
-                            <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Omar">
-                            <div>
-                                <h6 class="mb-0">Omar Ahmed</h6>
-                                <small class="text-muted">Freelance Developer</small>
+                <div class="col-lg-4 col-md-6">
+                    <div class="youtube-card">
+                        <div class="youtube-thumbnail">
+                            <img src="https://img.youtube.com/vi/brV2V99LxJY/maxresdefault.jpg" alt="Canva Pro Tutorial">
+                            <div class="play-button" onclick="openYouTube('brV2V99LxJY')">
+                                <i class="fas fa-play"></i>
                             </div>
+                        </div>
+                        <div class="p-3">
+                            <h5>HOW TO GET CANVA PRO FOR FREE</h5>
+                            <p class="text-muted small">Step-by-step guide to unlock Canva Pro features.</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <div class="testimonial-card">
-                        <p>"The Python course gave me the skills to automate tasks at work, saving me hours every week."</p>
-                        <div class="testimonial-author">
-                            <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="Fatima">
-                            <div>
-                                <h6 class="mb-0">Fatima Ali</h6>
-                                <small class="text-muted">Data Analyst</small>
+                <div class="col-lg-4 col-md-6">
+                    <div class="youtube-card">
+                        <div class="youtube-thumbnail">
+                            <img src="https://img.youtube.com/vi/1Onw8W1Krpc/maxresdefault.jpg" alt="Behind the Brand">
+                            <div class="play-button" onclick="openYouTube('1Onw8W1Krpc')">
+                                <i class="fas fa-play"></i>
                             </div>
+                        </div>
+                        <div class="p-3">
+                            <h5>THIS IS ME BEHIND THE BRAND</h5>
+                            <p class="text-muted small">Get to know the founder and the story behind Code With Ustaz.</p>
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="youtube-card">
+                        <div class="youtube-thumbnail">
+                            <img src="https://img.youtube.com/vi/8ivNjJts7bQ/maxresdefault.jpg" alt="AI Videos Tutorial">
+                            <div class="play-button" onclick="openYouTube('8ivNjJts7bQ')">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <h5>HOW TO CREATE AI VIDEOS IN MINUTES</h5>
+                            <p class="text-muted small">Master AI video creation with simple tools and techniques.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="youtube-card">
+                        <div class="youtube-thumbnail">
+                            <img src="https://img.youtube.com/vi/RAfjFgxv0dg/maxresdefault.jpg" alt="Content Creation">
+                            <div class="play-button" onclick="openYouTube('RAfjFgxv0dg')">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <h5>CONTENT CREATION WITH AI</h5>
+                            <p class="text-muted small">Leverage AI tools for efficient content creation.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="youtube-card">
+                        <div class="youtube-thumbnail">
+                            <img src="https://img.youtube.com/vi/vx_M3AP9Jl8/maxresdefault.jpg" alt="AI Mastery">
+                            <div class="play-button" onclick="openYouTube('vx_M3AP9Jl8')">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <h5>AI MASTERY</h5>
+                            <p class="text-muted small">Complete guide to mastering AI tools and technologies.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-4">
+                <a href="https://youtube.com/@codewithustaz" class="btn btn-danger btn-lg">
+                    <i class="fab fa-youtube me-2"></i>Subscribe to Our Channel
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Enrollment CTA -->
-    <section class="py-5 bg-primary text-white" id="enroll">
-        <div class="container py-5">
-            <div class="row align-items-center">
-                <div class="col-lg-8 mb-4 mb-lg-0">
-                    <h2 class="mb-3">Ready to Start Your Coding Journey?</h2>
-                    <p class="mb-0">Join thousands of students who transformed their careers with coding.</p>
-                </div>
-                <div class="col-lg-4 text-lg-end">
-                    <a href="#" class="btn btn-light btn-lg me-2">Enroll Now</a>
-                    <a href="#" class="btn btn-outline-light btn-lg">Free Trial</a>
-                    <a href="ustaz-bot.html" class="btn btn-success btn-lg">
-                        <i class="fas fa-robot me-2"></i>Ask USTAZ BOT
-                    </a>
+    <!-- WhatsApp Community Section -->
+    <section class="whatsapp-section" id="whatsapp">
+        <div class="container">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-8">
+                    <h2 class="fw-bold mb-4">
+                        <i class="fab fa-whatsapp me-3"></i>Join Our WhatsApp Community
+                    </h2>
+                    <p class="lead mb-5">Connect with fellow learners, get instant support, and stay updated with the latest coding tips and opportunities.</p>
+                    <div class="d-flex justify-content-center flex-wrap">
+                        <a href="https://whatsapp.com/channel/0029VaZxXob0lwgonZj7Gr0m" class="whatsapp-btn">
+                            <i class="fas fa-broadcast-tower"></i>
+                            Join WhatsApp Channel
+                        </a>
+                        <a href="https://chat.whatsapp.com/BCbL7sOJSyMAUz8V4DagdI" class="whatsapp-btn">
+                            <i class="fas fa-users"></i>
+                            Join WhatsApp Group
+                        </a>
+                    </div>
+                    <p class="mt-4 opacity-75">Get coding tips, project ideas, job opportunities, and connect with a community of passionate developers!</p>
                 </div>
             </div>
         </div>
@@ -460,7 +768,7 @@
                         </div>
                         <div>
                             <h5>Location</h5>
-                            <p class="text-muted">123 Code Street, Tech District, Cairo, Egypt</p>
+                            <p class="text-muted">Ayaura Street Abaji, Abuja Nigeria</p>
                         </div>
                     </div>
                     <div class="d-flex mb-4">
@@ -469,7 +777,7 @@
                         </div>
                         <div>
                             <h5>Phone</h5>
-                            <p class="text-muted">+20 123 456 7890</p>
+                            <p class="text-muted">+234 816 898 5912</p>
                         </div>
                     </div>
                     <div class="d-flex mb-4">
@@ -515,28 +823,28 @@
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
                         <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="https://youtube.com/@codewithustaz"><i class="fab fa-youtube"></i></a>
                         <a href="#"><i class="fab fa-github"></i></a>
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
                     <h5 class="text-white mb-4">Quick Links</h5>
-                    <ul class="list-unstyled">
+                    <ul class="list-unstyled footer-links">
                         <li class="mb-2"><a href="#home">Home</a></li>
-                        <li class="mb-2"><a href="#courses">Courses</a></li>
                         <li class="mb-2"><a href="#about">About</a></li>
-                        <li class="mb-2"><a href="#testimonials">Testimonials</a></li>
-                        <li class="mb-2"><a href="#contact">Contact</a></li>
+                        <li class="mb-2"><a href="#mission">Mission</a></li>
+                        <li class="mb-2"><a href="#vision">Vision</a></li>
+                        <li class="mb-2"><a href="#courses">Courses</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-2 col-md-6 mb-5 mb-md-0">
                     <h5 class="text-white mb-4">Courses</h5>
-                    <ul class="list-unstyled">
+                    <ul class="list-unstyled footer-links">
                         <li class="mb-2"><a href="#">Web Development</a></li>
                         <li class="mb-2"><a href="#">Python</a></li>
                         <li class="mb-2"><a href="#">Mobile Apps</a></li>
-                        <li class="mb-2"><a href="#">Data Science</a></li>
-                        <li class="mb-2"><a href="#">Algorithms</a></li>
+                        <li class="mb-2"><a href="#">Cybersecurity</a></li>
+                        <li class="mb-2"><a href="#">HTML & CSS</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-4">
@@ -552,7 +860,7 @@
             </div>
             <div class="row mt-5">
                 <div class="col-12 text-center">
-                    <p class="text-muted mb-0">&copy; 2023 Code With Ustaz. All Rights Reserved.</p>
+                    <p class="text-muted mb-0">&copy; 2023 Code With Ustaz. All Rights Reserved. | Founder: YAHAYA ZAID</p>
                 </div>
             </div>
         </div>
@@ -571,7 +879,39 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a href="#enroll" class="btn btn-primary">Enroll Now</a>
+                    <a href="https://wa.me/2348168985912" class="btn btn-success">
+                        <i class="fab fa-whatsapp me-2"></i>Contact for Payment
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Details Modal -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Payment Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Bank Transfer Details:</h6>
+                    <div class="alert alert-info">
+                        <p><strong>Bank Name:</strong> First Bank Nigeria</p>
+                        <p><strong>Account Name:</strong> YAHAYA ZAID</p>
+                        <p><strong>Account Number:</strong> 3123456789</p>
+                        <p><strong>Amount:</strong> ₦5,000 per course</p>
+                    </div>
+                    <p class="text-muted">After payment, send proof to:</p>
+                    <div class="d-flex gap-2">
+                        <a href="https://wa.me/2348168985912" class="btn btn-success btn-sm">
+                            <i class="fab fa-whatsapp me-1"></i>WhatsApp
+                        </a>
+                        <a href="mailto:contact@codewithustaz.com" class="btn btn-primary btn-sm">
+                            <i class="fas fa-envelope me-1"></i>Email
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -598,7 +938,8 @@
                     'Deployment (Heroku, Netlify)'
                 ],
                 duration: '6 Months',
-                projects: '10+ Projects'
+                projects: '10+ Projects',
+                price: '₦5,000'
             },
             'python': {
                 title: 'Python & Data Science',
@@ -614,7 +955,8 @@
                     'Automation Scripts'
                 ],
                 duration: '4 Months',
-                projects: '8+ Projects'
+                projects: '8+ Projects',
+                price: '₦5,000'
             },
             'mobile': {
                 title: 'Mobile App Development',
@@ -630,7 +972,42 @@
                     'Performance Optimization'
                 ],
                 duration: '5 Months',
-                projects: '6+ Apps'
+                projects: '6+ Apps',
+                price: '₦5,000'
+            },
+            'cybersecurity': {
+                title: 'Cybersecurity',
+                description: 'Learn to protect systems and networks from digital attacks. Master ethical hacking and penetration testing.',
+                topics: [
+                    'Network Security Fundamentals',
+                    'Ethical Hacking Techniques',
+                    'Penetration Testing',
+                    'Vulnerability Assessment',
+                    'Security Tools (Nmap, Wireshark)',
+                    'Incident Response',
+                    'Digital Forensics',
+                    'Security Compliance'
+                ],
+                duration: '6 Months',
+                projects: '8+ Security Projects',
+                price: '₦5,000'
+            },
+            'html-css': {
+                title: 'HTML & CSS Mastery',
+                description: 'Master the fundamentals of web development with HTML5 and CSS3. Create beautiful, responsive websites.',
+                topics: [
+                    'HTML5 Semantic Elements',
+                    'CSS3 Advanced Styling',
+                    'Responsive Web Design',
+                    'CSS Grid & Flexbox',
+                    'Bootstrap Framework',
+                    'CSS Animations',
+                    'Web Accessibility',
+                    'Performance Optimization'
+                ],
+                duration: '3 Months',
+                projects: '6+ Websites',
+                price: '₦5,000'
             }
         };
 
@@ -646,11 +1023,14 @@
                     ${course.topics.map(topic => `<li>${topic}</li>`).join('')}
                 </ul>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <p><strong>Duration:</strong> ${course.duration}</p>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <p><strong>Projects:</strong> ${course.projects}</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p><strong>Price:</strong> ${course.price}</p>
                     </div>
                 </div>
             `;
@@ -659,6 +1039,17 @@
             
             const modal = new bootstrap.Modal(document.getElementById('courseModal'));
             modal.show();
+        }
+
+        // Show Payment Details
+        function showPaymentDetails() {
+            const modal = new bootstrap.Modal(document.getElementById('paymentModal'));
+            modal.show();
+        }
+
+        // Open YouTube Video
+        function openYouTube(videoId) {
+            window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
         }
 
         // Form Submission
