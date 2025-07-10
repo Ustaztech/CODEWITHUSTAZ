@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USTAZ BOT - AI Coding Assistant</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --light-color: #f8f9fa;
+            --dark-color: #1a1a2e;
+            --bot-color: #00d4aa;
+            --user-color: #667eea;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .chat-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, var(--dark-color), var(--secondary-color));
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .bot-avatar {
+            width: 60px;
+            height: 60px;
+            background: var(--bot-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-size: 24px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin: 0 10px;
+        }
+
+        .message.bot .message-avatar {
+            background: var(--bot-color);
+        }
+
+        .message.user .message-avatar {
+            background: var(--user-color);
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 15px 20px;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message.user .message-content {
+            background: var(--user-color);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-time {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        .chat-input {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .form-control {
+            border-radius: 25px;
+            border: 2px solid #e9ecef;
+            padding: 15px 20px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+
+        .btn-send {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--primary-color);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: all 0.3s;
+        }
+
+        .btn-send:hover {
+            background: #2980b9;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 15px 20px;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 20px;
+            border-bottom-left-radius: 5px;
+            max-width: 70%;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .quick-action-btn {
+            background: #e9ecef;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            font-size: 14px;
+            color: #495057;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .quick-action-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Roboto Mono', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .chat-container { height: 95vh; }
+            .message-content { max-width: 85%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Chat Header -->
+        <div class="chat-header">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="bot-avatar">
+                <i class="fas fa-robot"></i>
+            </div>
+            <h3 class="mb-1">USTAZ BOT</h3>
+            <p class="mb-0 opacity-75">Your AI Coding Assistant</p>
+            <small class="d-block mt-2">
+                <i class="fas fa-circle text-success me-1"></i>
+                Online & Ready to Help
+            </small>
+        </div>
+
+        <!-- Chat Messages -->
+        <div class="chat-messages" id="chatMessages">
+            <!-- Welcome Message -->
+            <div class="message bot">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="message-content">
+                    <div>
+                        <strong>👋 Hello! I'm USTAZ BOT</strong><br><br>
+                        I'm here to help you with:
+                        <ul class="mb-2">
+                            <li>🔧 Coding problems & debugging</li>
+                            <li>📚 Course recommendations</li>
+                            <li>💡 Programming concepts</li>
+                            <li>🚀 Project ideas & guidance</li>
+                            <li>❓ General coding questions</li>
+                        </ul>
+                        What would you like to learn about today?
+                    </div>
+                    <div class="message-time">Just now</div>
+                </div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div class="message bot" id="typingIndicator">
+                <div class="message-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="typing-indicator">
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Input -->
+        <div class="chat-input">
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="quick-action-btn" onclick="sendQuickMessage('What courses do you offer?')">
+                    📚 Courses
+                </button>
+                <button class="quick-action-btn" onclick="sendQuickMessage('Help me debug my code')">
+                    🐛 Debug Help
+                </button>
+                <button class="quick-action-btn" onclick="sendQuickMessage('Explain JavaScript promises')">
+                    💡 Concepts
+                </button>
+                <button class="quick-action-btn" onclick="sendQuickMessage('Project ideas for beginners')">
+                    🚀 Projects
+                </button>
+            </div>
+
+            <!-- Input Field -->
+            <div class="input-group">
+                <input type="text" class="form-control" id="messageInput" placeholder="Ask me anything about coding..." autocomplete="off">
+                <button class="btn-send" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Bot responses database
+        const botResponses = {
+            greetings: [
+                "Hello! I'm USTAZ BOT, ready to help you with your coding journey! 🚀",
+                "Hi there! What coding challenge can I help you solve today? 💻",
+                "Welcome! I'm here to assist you with programming questions and guidance! 👨‍💻"
+            ],
+            courses: {
+                general: "We offer three main courses:\n\n🌐 **Full-Stack Web Development** ($99/month)\n- HTML, CSS, JavaScript, React, Node.js, MongoDB\n- 6 months, 10+ projects\n\n🐍 **Python & Data Science** ($89/month)\n- Python, Pandas, NumPy, Machine Learning\n- 4 months, 8+ projects\n\n📱 **Mobile App Development** ($109/month)\n- Flutter, Dart, Firebase\n- 5 months, 6+ apps\n\nWhich course interests you most?",
+                web: "Our **Full-Stack Web Development** course covers:\n\n**Frontend:**\n- HTML5 & CSS3\n- JavaScript (ES6+)\n- React.js\n\n**Backend:**\n- Node.js & Express\n- MongoDB\n- RESTful APIs\n- Authentication\n\n**Deployment:**\n- Heroku, Netlify\n\nDuration: 6 months with 10+ real projects! 🚀",
+                python: "Our **Python & Data Science** course includes:\n\n**Core Python:**\n- Syntax & OOP\n- Data structures\n\n**Data Science:**\n- Pandas & NumPy\n- Matplotlib & Seaborn\n- Machine Learning basics\n\n**Practical Skills:**\n- Web scraping\n- Automation scripts\n\nDuration: 4 months with 8+ projects! 🐍",
+                mobile: "Our **Mobile App Development** course covers:\n\n**Flutter & Dart:**\n- Cross-platform development\n- UI/UX design\n- State management\n\n**Backend Integration:**\n- Firebase\n- REST APIs\n- Local storage\n\n**Publishing:**\n- Google Play Store\n- Apple App Store\n\nDuration: 5 months with 6+ apps! 📱"
+            },
+            debugging: [
+                "I'd love to help you debug! 🐛\n\nPlease share:\n1. What programming language?\n2. What's the error message?\n3. What were you trying to do?\n4. Your code snippet (if possible)\n\nCommon debugging tips:\n- Check syntax errors\n- Verify variable names\n- Use console.log() for JavaScript\n- Check indentation in Python",
+                "Debugging can be tricky! Here's my systematic approach:\n\n1. **Read the error message carefully**\n2. **Check the line number mentioned**\n3. **Verify syntax and spelling**\n4. **Use print/console statements**\n5. **Test with smaller inputs**\n\nWhat specific issue are you facing?"
+            ],
+            javascript: {
+                promises: "**JavaScript Promises** are objects representing eventual completion of an async operation! 🔄\n\n```javascript\n// Creating a Promise\nconst myPromise = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve('Success!');\n  }, 1000);\n});\n\n// Using the Promise\nmyPromise\n  .then(result => console.log(result))\n  .catch(error => console.log(error));\n```\n\n**Key concepts:**\n- **Pending**: Initial state\n- **Fulfilled**: Operation completed successfully\n- **Rejected**: Operation failed\n\nWant to learn about async/await too?",
+                functions: "**JavaScript Functions** are reusable blocks of code! 🔧\n\n```javascript\n// Function Declaration\nfunction greet(name) {\n  return `Hello, ${name}!`;\n}\n\n// Arrow Function\nconst greet = (name) => `Hello, ${name}!`;\n\n// Function Expression\nconst greet = function(name) {\n  return `Hello, ${name}!`;\n};\n```\n\n**Key points:**\n- Functions can take parameters\n- They can return values\n- Arrow functions have shorter syntax\n- Functions are first-class objects in JS",
+                loops: "**JavaScript Loops** help repeat code efficiently! 🔄\n\n```javascript\n// For Loop\nfor (let i = 0; i < 5; i++) {\n  console.log(i);\n}\n\n// While Loop\nlet count = 0;\nwhile (count < 5) {\n  console.log(count);\n  count++;\n}\n\n// For...of Loop (arrays)\nconst fruits = ['apple', 'banana', 'orange'];\nfor (const fruit of fruits) {\n  console.log(fruit);\n}\n\n// For...in Loop (objects)\nconst person = {name: 'John', age: 30};\nfor (const key in person) {\n  console.log(key, person[key]);\n}\n```"
+            },
+            python: {
+                basics: "**Python Basics** - Let's start your journey! 🐍\n\n```python\n# Variables\nname = \"USTAZ BOT\"\nage = 1\nis_helpful = True\n\n# Print statement\nprint(f\"Hello, I'm {name}!\")\n\n# Lists\nfruits = ['apple', 'banana', 'orange']\nprint(fruits[0])  # apple\n\n# Dictionaries\nperson = {'name': 'John', 'age': 30}\nprint(person['name'])  # John\n\n# Functions\ndef greet(name):\n    return f\"Hello, {name}!\"\n\nprint(greet(\"Student\"))\n```\n\nWhat specific Python topic would you like to explore?",
+                loops: "**Python Loops** make repetition easy! 🔄\n\n```python\n# For loop with range\nfor i in range(5):\n    print(i)  # 0, 1, 2, 3, 4\n\n# For loop with list\nfruits = ['apple', 'banana', 'orange']\nfor fruit in fruits:\n    print(fruit)\n\n# While loop\ncount = 0\nwhile count < 5:\n    print(count)\n    count += 1\n\n# List comprehension (advanced)\nsquares = [x**2 for x in range(5)]\nprint(squares)  # [0, 1, 4, 9, 16]\n```\n\nPython loops are very readable and powerful!"
+            },
+            projects: {
+                beginner: "**Beginner Project Ideas** 🚀\n\n**Web Development:**\n- Personal portfolio website\n- To-do list app\n- Weather app using API\n- Simple calculator\n\n**Python:**\n- Number guessing game\n- Password generator\n- Basic web scraper\n- File organizer script\n\n**General:**\n- Rock, Paper, Scissors game\n- Unit converter\n- Simple chatbot\n- Expense tracker\n\nWhich type of project interests you most?",
+                intermediate: "**Intermediate Project Ideas** 💪\n\n**Web Development:**\n- E-commerce website\n- Social media dashboard\n- Real-time chat application\n- Blog with CMS\n\n**Python:**\n- Data visualization dashboard\n- Machine learning model\n- API with Flask/Django\n- Automated testing suite\n\n**Mobile:**\n- Expense tracking app\n- Fitness tracker\n- Recipe finder app\n- Local business directory\n\nReady to challenge yourself?"
+            },
+            help: "I can help you with:\n\n🔧 **Debugging & Problem Solving**\n- Error analysis\n- Code review\n- Best practices\n\n📚 **Learning Resources**\n- Course information\n- Concept explanations\n- Practice exercises\n\n💡 **Programming Concepts**\n- JavaScript, Python, HTML/CSS\n- Data structures & algorithms\n- Web development\n\n🚀 **Project Guidance**\n- Project ideas\n- Architecture advice\n- Technology recommendations\n\nWhat specific area would you like help with?"
+        };
+
+        // Initialize chat
+        let messageCount = 0;
+
+        // Send message function
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message === '') return;
+            
+            // Add user message
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Show typing indicator
+            showTyping();
+            
+            // Generate bot response
+            setTimeout(() => {
+                hideTyping();
+                const response = generateResponse(message);
+                addMessage(response, 'bot');
+            }, 1000 + Math.random() * 2000);
+        }
+
+        // Send quick message
+        function sendQuickMessage(message) {
+            document.getElementById('messageInput').value = message;
+            sendMessage();
+        }
+
+        // Add message to chat
+        function addMessage(content, sender) {
+            const messagesContainer = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">
+                    ${sender === 'bot' ? '<i class="fas fa-robot"></i>' : '<i class="fas fa-user"></i>'}
+                </div>
+                <div class="message-content">
+                    <div>${formatMessage(content)}</div>
+                    <div class="message-time">${time}</div>
+                </div>
+            `;
+            
+            // Insert before typing indicator
+            const typingIndicator = document.getElementById('typingIndicator');
+            messagesContainer.insertBefore(messageDiv, typingIndicator);
+            
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            messageCount++;
+        }
+
+        // Format message with markdown-like syntax
+        function formatMessage(content) {
+            return content
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/```([\s\S]*?)```/g, '<div class="code-block">$1</div>')
+                .replace(/\n/g, '<br>');
+        }
+
+        // Show typing indicator
+        function showTyping() {
+            document.querySelector('#typingIndicator .typing-indicator').style.display = 'block';
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Hide typing indicator
+        function hideTyping() {
+            document.querySelector('#typingIndicator .typing-indicator').style.display = 'none';
+        }
+
+        // Generate bot response
+        function generateResponse(message) {
+            const msg = message.toLowerCase();
+            
+            // Greetings
+            if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey')) {
+                return botResponses.greetings[Math.floor(Math.random() * botResponses.greetings.length)];
+            }
+            
+            // Courses
+            if (msg.includes('course') || msg.includes('learn') || msg.includes('study')) {
+                if (msg.includes('web') || msg.includes('html') || msg.includes('css') || msg.includes('react')) {
+                    return botResponses.courses.web;
+                } else if (msg.includes('python') || msg.includes('data')) {
+                    return botResponses.courses.python;
+                } else if (msg.includes('mobile') || msg.includes('app') || msg.includes('flutter')) {
+                    return botResponses.courses.mobile;
+                } else {
+                    return botResponses.courses.general;
+                }
+            }
+            
+            // Debugging
+            if (msg.includes('debug') || msg.includes('error') || msg.includes('bug') || msg.includes('fix')) {
+                return botResponses.debugging[Math.floor(Math.random() * botResponses.debugging.length)];
+            }
+            
+            // JavaScript concepts
+            if (msg.includes('javascript') || msg.includes('js')) {
+                if (msg.includes('promise') || msg.includes('async')) {
+                    return botResponses.javascript.promises;
+                } else if (msg.includes('function')) {
+                    return botResponses.javascript.functions;
+                } else if (msg.includes('loop')) {
+                    return botResponses.javascript.loops;
+                }
+            }
+            
+            // Python concepts
+            if (msg.includes('python')) {
+                if (msg.includes('basic') || msg.includes('start')) {
+                    return botResponses.python.basics;
+                } else if (msg.includes('loop')) {
+                    return botResponses.python.loops;
+                }
+            }
+            
+            // Projects
+            if (msg.includes('project') || msg.includes('build') || msg.includes('create')) {
+                if (msg.includes('beginner') || msg.includes('easy') || msg.includes('simple')) {
+                    return botResponses.projects.beginner;
+                } else {
+                    return botResponses.projects.intermediate;
+                }
+            }
+            
+            // Help
+            if (msg.includes('help') || msg.includes('what can you do')) {
+                return botResponses.help;
+            }
+            
+            // Default responses
+            const defaultResponses = [
+                "That's an interesting question! 🤔 Could you provide more details so I can give you a better answer?",
+                "I'd love to help you with that! Can you be more specific about what you're trying to achieve?",
+                "Great question! 💡 For the best assistance, could you tell me:\n- What programming language?\n- What specific problem you're facing?\n- What you've tried so far?",
+                "I'm here to help! 🚀 Try asking about:\n- Specific coding problems\n- Course information\n- Programming concepts\n- Project ideas",
+                "Hmm, I want to make sure I give you the most helpful answer! Could you rephrase your question or provide more context?"
+            ];
+            
+            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+        }
+
+        // Go back to main site
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // Enter key to send message
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Auto-focus input
+        document.getElementById('messageInput').focus();
+    </script>
+</body>
+</html>
