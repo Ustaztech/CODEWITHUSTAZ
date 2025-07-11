@@ -536,12 +536,25 @@
             
             // Default responses
             const defaultResponses = [
-                "That's an interesting question! 🤔 Could you provide more details so I can give you a better answer?",
-                "I'd love to help you with that! Can you be more specific about what you're trying to achieve?",
-                "Great question! 💡 For the best assistance, could you tell me:\n- What programming language?\n- What specific problem you're facing?\n- What you've tried so far?",
-                "I'm here to help! 🚀 Try asking about:\n- Specific coding problems\n- Course information\n- Programming concepts\n- Project ideas",
-                "Hmm, I want to make sure I give you the most helpful answer! Could you rephrase your question or provide more context?"
+                "That's an interesting question! 🤔 Could you provide more details so I can give you a better answer?\n\nTry asking about:\n• Specific coding problems\n• Course information\n• Programming concepts\n• Project ideas",
+                "I'd love to help you with that! Can you be more specific about what you're trying to achieve?\n\nI can assist with:\n• JavaScript, Python, HTML/CSS\n• Debugging and problem-solving\n• Course recommendations\n• Career guidance",
+                "Great question! 💡 For the best assistance, could you tell me:\n• What programming language?\n• What specific problem you're facing?\n• What you've tried so far?\n\nI'm here to help you succeed! 🚀",
+                "I'm here to help! 🚀 Try asking about:\n• **Coding Problems**: Debug errors, explain concepts\n• **Courses**: Learn about our programs\n• **Projects**: Get ideas and guidance\n• **Career**: Tips for becoming a developer",
+                "Hmm, I want to make sure I give you the most helpful answer! Could you rephrase your question or provide more context?\n\n**Popular topics:**\n• Web Development\n• Python Programming\n• Mobile Apps\n• Career Advice"
             ];
+            
+            // Add some intelligence based on keywords
+            if (msg.includes('career') || msg.includes('job') || msg.includes('work')) {
+                return "Great question about tech careers! 💼\n\n**Popular Career Paths:**\n• **Frontend Developer** - HTML, CSS, JavaScript, React\n• **Backend Developer** - Node.js, Python, Databases\n• **Full-Stack Developer** - Both frontend and backend\n• **Mobile Developer** - Flutter, React Native\n• **Data Scientist** - Python, Machine Learning\n\n**Tips for Success:**\n1. Build a strong portfolio with real projects\n2. Contribute to open source projects\n3. Network with other developers\n4. Keep learning new technologies\n5. Practice coding challenges\n\nOur courses can help you get started! Which career path interests you most?";
+            }
+            
+            if (msg.includes('salary') || msg.includes('pay') || msg.includes('money')) {
+                return "Tech salaries in Nigeria vary by experience and location! 💰\n\n**Entry Level (0-2 years):**\n• Frontend Developer: ₦150k - ₦400k/month\n• Backend Developer: ₦200k - ₦500k/month\n• Full-Stack Developer: ₦250k - ₦600k/month\n\n**Mid Level (2-5 years):**\n• Senior Developer: ₦500k - ₦1.2M/month\n• Tech Lead: ₦800k - ₦1.5M/month\n\n**Senior Level (5+ years):**\n• Principal Engineer: ₦1M - ₦3M/month\n• CTO/VP Engineering: ₦2M+/month\n\n**Remote/International:**\n• Can earn $2k - $10k+ USD/month\n\n*Note: Salaries depend on skills, company, and location. Building strong skills is key!*";
+            }
+            
+            if (msg.includes('time') || msg.includes('how long') || msg.includes('duration')) {
+                return "Learning timelines depend on your goals and dedication! ⏰\n\n**To Get Job-Ready:**\n• **Web Development**: 6-12 months (with our course: 6 months)\n• **Python Programming**: 4-8 months (with our course: 4 months)\n• **Mobile Development**: 6-10 months (with our course: 5 months)\n\n**Study Schedule Recommendations:**\n• **Part-time**: 2-3 hours/day, 5 days/week\n• **Full-time**: 6-8 hours/day, 6 days/week\n• **Weekend**: 8-10 hours/day, 2 days/week\n\n**Success Factors:**\n✅ Consistent daily practice\n✅ Building real projects\n✅ Getting feedback from mentors\n✅ Joining coding communities\n\nOur structured courses can accelerate your learning! Which path interests you?";
+            }
             
             return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
         }

@@ -523,6 +523,9 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jsPDF and html2canvas for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <script>
         // Sample data
@@ -724,7 +727,60 @@
         }
 
         function downloadCertificate() {
-            alert('Certificate download functionality will be implemented. This would generate a PDF certificate.');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('landscape', 'mm', 'a4');
+            
+            // Certificate content
+            const studentName = document.getElementById('certificateStudentName').textContent;
+            const courseName = document.getElementById('certificateCourseName').textContent;
+            const date = document.getElementById('certificateDate').textContent;
+            
+            // Set background color
+            pdf.setFillColor(240, 248, 255);
+            pdf.rect(0, 0, 297, 210, 'F');
+            
+            // Add border
+            pdf.setDrawColor(52, 152, 219);
+            pdf.setLineWidth(3);
+            pdf.rect(10, 10, 277, 190);
+            
+            // Title
+            pdf.setFontSize(28);
+            pdf.setTextColor(52, 152, 219);
+            pdf.text('CODE WITH USTAZ', 148.5, 40, { align: 'center' });
+            
+            pdf.setFontSize(20);
+            pdf.setTextColor(0, 0, 0);
+            pdf.text('Certificate of Completion', 148.5, 60, { align: 'center' });
+            
+            // Content
+            pdf.setFontSize(14);
+            pdf.text('This is to certify that', 148.5, 85, { align: 'center' });
+            
+            pdf.setFontSize(24);
+            pdf.setTextColor(52, 152, 219);
+            pdf.text(studentName, 148.5, 105, { align: 'center' });
+            
+            pdf.setFontSize(14);
+            pdf.setTextColor(0, 0, 0);
+            pdf.text('has successfully completed the course', 148.5, 125, { align: 'center' });
+            
+            pdf.setFontSize(18);
+            pdf.setTextColor(44, 62, 80);
+            pdf.text(courseName, 148.5, 145, { align: 'center' });
+            
+            pdf.setFontSize(12);
+            pdf.text('with outstanding performance and dedication to learning', 148.5, 160, { align: 'center' });
+            
+            // Signatures
+            pdf.text('Instructor: Sarah Johnson', 60, 180);
+            pdf.text('Founder: YAHAYA ZAID', 200, 180);
+            
+            // Date
+            pdf.text(`Date: ${date}`, 148.5, 195, { align: 'center' });
+            
+            // Download
+            pdf.save(`${studentName}_${courseName}_Certificate.pdf`);
         }
 
         function showProfile() {

@@ -411,6 +411,8 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <script>
         let currentStep = 1;
@@ -628,11 +630,122 @@
         }
 
         function downloadApplicationLetter() {
-            alert('Application letter download functionality will be implemented. This would generate a PDF of your application letter.');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            
+            const today = new Date().toLocaleDateString();
+            const applicationId = 'APP' + Date.now().toString().slice(-6);
+            
+            // Header
+            pdf.setFontSize(16);
+            pdf.setTextColor(52, 152, 219);
+            pdf.text('CODE WITH USTAZ', 105, 20, { align: 'center' });
+            
+            pdf.setFontSize(10);
+            pdf.setTextColor(0, 0, 0);
+            pdf.text('Ayaura Street Abaji, Abuja Nigeria', 105, 30, { align: 'center' });
+            pdf.text('Email: contact@codewithustaz.com | Phone: +234 816 898 5912', 105, 35, { align: 'center' });
+            
+            // Line
+            pdf.setDrawColor(0, 0, 0);
+            pdf.line(20, 45, 190, 45);
+            
+            // Application details
+            pdf.setFontSize(12);
+            pdf.text(`Date: ${today}`, 20, 60);
+            pdf.text(`Application ID: ${applicationId}`, 20, 70);
+            
+            pdf.setFontSize(14);
+            pdf.text('APPLICATION FOR ADMISSION', 20, 90);
+            
+            pdf.setFontSize(11);
+            pdf.text('Dear Admissions Committee,', 20, 110);
+            
+            const content = [
+                `I, ${applicationData.firstName} ${applicationData.lastName}, hereby submit my application`,
+                `for admission to the ${courseNames[applicationData.course]} program at Code With Ustaz.`,
+                '',
+                'Personal Details:',
+                `• Full Name: ${applicationData.firstName} ${applicationData.lastName}`,
+                `• Email: ${applicationData.email}`,
+                `• Phone: ${applicationData.phone}`,
+                `• Date of Birth: ${applicationData.dob}`,
+                `• Gender: ${applicationData.gender}`,
+                `• Address: ${applicationData.address}`,
+                '',
+                `Educational Background: ${applicationData.education}`,
+                `Programming Experience: ${applicationData.experience}`,
+                '',
+                'Motivation:',
+                applicationData.motivation,
+                '',
+                'I am committed to dedicating the necessary time and effort to successfully',
+                'complete this program and contribute positively to the learning community.',
+                '',
+                'Thank you for considering my application. I look forward to hearing from you soon.',
+                '',
+                'Sincerely,',
+                `${applicationData.firstName} ${applicationData.lastName}`,
+                'Digital Signature'
+            ];
+            
+            let yPosition = 120;
+            content.forEach(line => {
+                if (yPosition > 270) {
+                    pdf.addPage();
+                    yPosition = 20;
+                }
+                pdf.text(line, 20, yPosition);
+                yPosition += 7;
+            });
+            
+            pdf.save(`${applicationData.firstName}_${applicationData.lastName}_Application.pdf`);
         }
 
         function downloadAdmissionLetter() {
-            alert('Admission letter download functionality will be implemented. This would generate a PDF of your admission letter.');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            
+            const studentId = document.getElementById('studentId').textContent;
+            const course = document.getElementById('admittedCourse').textContent;
+            const startDate = document.getElementById('startDate').textContent;
+            
+            // Set background color
+            pdf.setFillColor(39, 174, 96);
+            pdf.rect(0, 0, 210, 297, 'F');
+            
+            // White content area
+            pdf.setFillColor(255, 255, 255);
+            pdf.rect(20, 30, 170, 237, 'F');
+            
+            // Header
+            pdf.setFontSize(20);
+            pdf.setTextColor(39, 174, 96);
+            pdf.text('🎉 CONGRATULATIONS! 🎉', 105, 60, { align: 'center' });
+            
+            pdf.setFontSize(18);
+            pdf.text('ADMISSION LETTER', 105, 80, { align: 'center' });
+            
+            pdf.setFontSize(14);
+            pdf.setTextColor(0, 0, 0);
+            pdf.text('CODE WITH USTAZ', 105, 100, { align: 'center' });
+            
+            pdf.setFontSize(12);
+            pdf.text('You have been successfully admitted!', 105, 120, { align: 'center' });
+            
+            // Details
+            pdf.setFontSize(11);
+            pdf.text(`Student ID: ${studentId}`, 30, 150);
+            pdf.text(`Course: ${course}`, 30, 165);
+            pdf.text(`Start Date: ${startDate}`, 30, 180);
+            pdf.text(`Student Name: ${applicationData.firstName} ${applicationData.lastName}`, 30, 195);
+            
+            // Footer
+            pdf.text('Welcome to Code With Ustaz family!', 105, 230, { align: 'center' });
+            pdf.text('Founder: YAHAYA ZAID', 105, 245, { align: 'center' });
+            pdf.text(new Date().toLocaleDateString(), 105, 260, { align: 'center' });
+            
+            pdf.save(`${applicationData.firstName}_${applicationData.lastName}_Admission_Letter.pdf`);
         }
 
         function restartApplication() {

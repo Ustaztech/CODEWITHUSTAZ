@@ -1055,7 +1055,33 @@
         // Form Submission
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Thank you for your message! We will contact you soon.');
+            
+            // Get form data
+            const formData = new FormData(this);
+            const name = this.querySelector('input[placeholder="Your Name"]').value;
+            const email = this.querySelector('input[placeholder="Your Email"]').value;
+            const subject = this.querySelector('input[placeholder="Subject"]').value;
+            const message = this.querySelector('textarea').value;
+            
+            // Simulate sending email (in real app, this would send to backend)
+            const emailBody = `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}`;
+            const mailtoLink = `mailto:contact@codewithustaz.com?subject=${encodeURIComponent(subject || 'Contact Form Submission')}&body=${encodeURIComponent(emailBody)}`;
+            
+            // Open email client
+            window.location.href = mailtoLink;
+            
+            // Show success message
+            alert('Thank you for your message! Your email client will open to send the message.');
+            this.reset();
+        });
+        
+        // Newsletter subscription
+        document.querySelector('footer form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = this.querySelector('input[type="email"]').value;
+            
+            // Simulate newsletter subscription
+            alert(`Thank you for subscribing with email: ${email}. You'll receive coding tips and updates!`);
             this.reset();
         });
 
