@@ -12,6 +12,9 @@
       "dest": "/$1"
     }
   ],
+  "outputDirectory": ".",
+  "buildCommand": "echo 'Static site - no build needed'",
+  "installCommand": "echo 'No install needed'",
   "headers": [
     {
       "source": "/(.*)",

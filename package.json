@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npx live-server --port=3000 --open=index.html",
     "start": "npx live-server --port=3000 --open=index.html",
-    "build": "echo 'Static site - no build needed'",
+    "build": "mkdir -p dist && cp -r * dist/ 2>/dev/null || true",
     "deploy": "echo 'Deploying static site'"
   },
   "keywords": [
