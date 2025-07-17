@@ -12,6 +12,11 @@
   status = 200
 
 [[redirects]]
+  from = "/.netlify/functions/ustaz-bot/*"
+  to = "/.netlify/functions/ustaz-bot"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>USTAZ BOT - AI Coding Assistant</title>
+    <title>USTAZ BOT - Advanced AI Coding Assistant</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
     <style>
         :root {
             --primary-color: #3498db;
@@ -19,6 +21,8 @@
             --dark-color: #1a1a2e;
             --bot-color: #00d4aa;
             --user-color: #667eea;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
         }
 
         body {
@@ -30,7 +34,7 @@
         }
 
         .chat-container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -45,41 +49,63 @@
             background: linear-gradient(135deg, var(--dark-color), var(--secondary-color));
             color: white;
             padding: 20px;
-            text-align: center;
             position: relative;
+            border-bottom: 3px solid var(--bot-color);
         }
 
         .bot-avatar {
-            width: 60px;
-            height: 60px;
-            background: var(--bot-color);
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--bot-color), #00b894);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 10px;
-            font-size: 24px;
+            margin: 0 auto 15px;
+            font-size: 28px;
             animation: pulse 2s infinite;
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.3);
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 212, 170, 0.3); }
+            50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 212, 170, 0.5); }
+            100% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 212, 170, 0.3); }
+        }
+
+        .bot-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: var(--success-color);
+            border-radius: 50%;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
         }
 
         .chat-messages {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
         }
 
         .message {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             display: flex;
             align-items: flex-start;
-            animation: slideIn 0.3s ease-out;
+            animation: slideIn 0.4s ease-out;
         }
 
         @keyframes slideIn {
@@ -92,54 +118,59 @@
         }
 
         .message-avatar {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: bold;
-            margin: 0 10px;
+            margin: 0 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .message.bot .message-avatar {
-            background: var(--bot-color);
+            background: linear-gradient(135deg, var(--bot-color), #00b894);
         }
 
         .message.user .message-avatar {
-            background: var(--user-color);
+            background: linear-gradient(135deg, var(--user-color), #5a67d8);
         }
 
         .message-content {
-            max-width: 70%;
-            padding: 15px 20px;
+            max-width: 75%;
+            padding: 20px 25px;
             border-radius: 20px;
             position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .message.bot .message-content {
             background: white;
             border: 2px solid #e9ecef;
-            border-bottom-left-radius: 5px;
+            border-bottom-left-radius: 8px;
         }
 
         .message.user .message-content {
-            background: var(--user-color);
+            background: linear-gradient(135deg, var(--user-color), #5a67d8);
             color: white;
-            border-bottom-right-radius: 5px;
+            border-bottom-right-radius: 8px;
         }
 
         .message-time {
-            font-size: 12px;
+            font-size: 11px;
             opacity: 0.7;
-            margin-top: 5px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .chat-input {
-            padding: 20px;
+            padding: 25px;
             background: white;
-            border-top: 1px solid #e9ecef;
+            border-top: 2px solid #e9ecef;
         }
 
         .input-group {
@@ -149,57 +180,67 @@
         .form-control {
             border-radius: 25px;
             border: 2px solid #e9ecef;
-            padding: 15px 20px;
+            padding: 18px 60px 18px 25px;
             font-size: 16px;
             transition: all 0.3s;
+            background: #f8f9fa;
         }
 
         .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+            border-color: var(--bot-color);
+            box-shadow: 0 0 0 0.2rem rgba(0, 212, 170, 0.25);
+            background: white;
         }
 
         .btn-send {
             position: absolute;
-            right: 5px;
+            right: 8px;
             top: 50%;
             transform: translateY(-50%);
-            background: var(--primary-color);
+            background: linear-gradient(135deg, var(--bot-color), #00b894);
             border: none;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);
         }
 
         .btn-send:hover {
-            background: #2980b9;
             transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 212, 170, 0.4);
+        }
+
+        .btn-send:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
 
         .typing-indicator {
             display: none;
-            padding: 15px 20px;
+            padding: 20px 25px;
             background: white;
             border: 2px solid #e9ecef;
             border-radius: 20px;
-            border-bottom-left-radius: 5px;
-            max-width: 70%;
+            border-bottom-left-radius: 8px;
+            max-width: 75%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .typing-dots {
             display: flex;
-            gap: 4px;
+            gap: 6px;
+            align-items: center;
         }
 
         .typing-dot {
-            width: 8px;
-            height: 8px;
-            background: #999;
+            width: 10px;
+            height: 10px;
+            background: var(--bot-color);
             border-radius: 50%;
             animation: typing 1.4s infinite;
         }
@@ -208,41 +249,57 @@
         .typing-dot:nth-child(3) { animation-delay: 0.4s; }
 
         @keyframes typing {
-            0%, 60%, 100% { transform: translateY(0); }
-            30% { transform: translateY(-10px); }
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-15px); opacity: 1; }
         }
 
         .quick-actions {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
 
         .quick-action-btn {
-            background: #e9ecef;
-            border: none;
-            border-radius: 20px;
-            padding: 8px 15px;
+            background: linear-gradient(135deg, #e9ecef, #f8f9fa);
+            border: 2px solid #dee2e6;
+            border-radius: 25px;
+            padding: 10px 18px;
             font-size: 14px;
             color: #495057;
             transition: all 0.3s;
             cursor: pointer;
+            font-weight: 500;
         }
 
         .quick-action-btn:hover {
-            background: var(--primary-color);
+            background: linear-gradient(135deg, var(--bot-color), #00b894);
             color: white;
+            border-color: var(--bot-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 212, 170, 0.3);
         }
 
         .code-block {
-            background: #282c34;
-            color: #f8f8f2;
-            padding: 15px;
-            border-radius: 8px;
+            background: #2d3748;
+            color: #f7fafc;
+            padding: 20px;
+            border-radius: 12px;
             font-family: 'Roboto Mono', monospace;
-            margin: 10px 0;
+            margin: 15px 0;
             overflow-x: auto;
+            border-left: 4px solid var(--bot-color);
+            position: relative;
+        }
+
+        .code-block::before {
+            content: 'CODE';
+            position: absolute;
+            top: 8px;
+            right: 15px;
+            font-size: 10px;
+            color: var(--bot-color);
+            font-weight: bold;
         }
 
         .back-btn {
@@ -254,8 +311,8 @@
             border: none;
             color: white;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -264,12 +321,68 @@
 
         .back-btn:hover {
             background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .message-content h2, .message-content h3, .message-content h4 {
+            color: var(--secondary-color);
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .message-content ul, .message-content ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+
+        .message-content li {
+            margin: 5px 0;
+        }
+
+        .message-content strong {
+            color: var(--bot-color);
+        }
+
+        .ai-thinking {
+            display: none;
+            align-items: center;
+            gap: 10px;
+            color: var(--bot-color);
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .thinking-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e9ecef;
+            border-top: 2px solid var(--bot-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .session-info {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            backdrop-filter: blur(10px);
         }
 
         @media (max-width: 768px) {
             body { padding: 10px; }
             .chat-container { height: 95vh; }
             .message-content { max-width: 85%; }
+            .quick-actions { gap: 8px; }
+            .quick-action-btn { padding: 8px 12px; font-size: 12px; }
         }
     </style>
 </head>
@@ -280,15 +393,20 @@
             <button class="back-btn" onclick="goBack()">
                 <i class="fas fa-arrow-left"></i>
             </button>
-            <div class="bot-avatar">
-                <i class="fas fa-robot"></i>
+            <div class="session-info" id="sessionInfo">
+                Session: Active
             </div>
-            <h3 class="mb-1">USTAZ BOT</h3>
-            <p class="mb-0 opacity-75">Your AI Coding Assistant</p>
-            <small class="d-block mt-2">
-                <i class="fas fa-circle text-success me-1"></i>
-                Online & Ready to Help
-            </small>
+            <div class="text-center">
+                <div class="bot-avatar">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h2 class="mb-1">USTAZ BOT</h2>
+                <p class="mb-2 opacity-75">Advanced AI Coding Assistant</p>
+                <div class="bot-status">
+                    <div class="status-indicator"></div>
+                    <small>Online & Ready to Help</small>
+                </div>
+            </div>
         </div>
 
         <!-- Chat Messages -->
@@ -300,19 +418,31 @@
                 </div>
                 <div class="message-content">
                     <div>
-                        <strong>👋 Hello! I'm USTAZ BOT</strong><br><br>
-                        I'm here to help you with:
-                        <ul class="mb-2">
-                            <li>🔧 Coding problems & debugging</li>
-                            <li>📚 Course recommendations</li>
-                            <li>💡 Programming concepts</li>
-                            <li>🚀 Project ideas & guidance</li>
-                            <li>❓ General coding questions</li>
+                        <h3>🤖 Hello! I'm USTAZ BOT - Your Advanced AI Assistant</h3>
+                        <p>I'm an intelligent coding assistant powered by advanced AI. I can help you with:</p>
+                        <ul>
+                            <li><strong>🔧 Code Analysis & Debugging</strong> - Find and fix errors in your code</li>
+                            <li><strong>📚 Concept Explanations</strong> - Break down complex programming topics</li>
+                            <li><strong>💼 Career Guidance</strong> - Professional advice for tech careers</li>
+                            <li><strong>🚀 Project Assistance</strong> - Help with planning and implementation</li>
+                            <li><strong>🎯 Best Practices</strong> - Industry-standard coding practices</li>
+                            <li><strong>🔍 Problem Solving</strong> - Systematic approach to technical challenges</li>
                         </ul>
-                        What would you like to learn about today?
+                        <p><strong>I'm equipped with extensive knowledge in:</strong></p>
+                        <p>JavaScript, Python, React, Node.js, HTML/CSS, Databases, Web Development, Data Science, Cybersecurity, and much more!</p>
+                        <p><em>Ask me anything - I'm here to provide professional, detailed solutions!</em></p>
                     </div>
-                    <div class="message-time">Just now</div>
+                    <div class="message-time">
+                        <i class="fas fa-clock"></i>
+                        Just now
+                    </div>
                 </div>
+            </div>
+
+            <!-- AI Thinking Indicator -->
+            <div class="ai-thinking" id="aiThinking">
+                <div class="thinking-spinner"></div>
+                <span>USTAZ BOT is analyzing your question...</span>
             </div>
 
             <!-- Typing Indicator -->
@@ -334,24 +464,30 @@
         <div class="chat-input">
             <!-- Quick Actions -->
             <div class="quick-actions">
-                <button class="quick-action-btn" onclick="sendQuickMessage('What courses do you offer?')">
-                    📚 Courses
+                <button class="quick-action-btn" onclick="sendQuickMessage('Explain JavaScript promises with examples')">
+                    🔄 JavaScript Promises
                 </button>
-                <button class="quick-action-btn" onclick="sendQuickMessage('Help me debug my code')">
-                    🐛 Debug Help
+                <button class="quick-action-btn" onclick="sendQuickMessage('Help me debug this Python error')">
+                    🐛 Debug Python Code
                 </button>
-                <button class="quick-action-btn" onclick="sendQuickMessage('Explain JavaScript promises')">
-                    💡 Concepts
+                <button class="quick-action-btn" onclick="sendQuickMessage('Best practices for React development')">
+                    ⚛️ React Best Practices
                 </button>
-                <button class="quick-action-btn" onclick="sendQuickMessage('Project ideas for beginners')">
-                    🚀 Projects
+                <button class="quick-action-btn" onclick="sendQuickMessage('Career advice for becoming a full-stack developer')">
+                    💼 Career Guidance
+                </button>
+                <button class="quick-action-btn" onclick="sendQuickMessage('Recommend courses for data science')">
+                    📚 Course Recommendations
+                </button>
+                <button class="quick-action-btn" onclick="sendQuickMessage('How to optimize database queries')">
+                    🗄️ Database Optimization
                 </button>
             </div>
 
             <!-- Input Field -->
             <div class="input-group">
-                <input type="text" class="form-control" id="messageInput" placeholder="Ask me anything about coding..." autocomplete="off">
-                <button class="btn-send" onclick="sendMessage()">
+                <input type="text" class="form-control" id="messageInput" placeholder="Ask me anything about coding, career advice, debugging, or technical concepts..." autocomplete="off">
+                <button class="btn-send" id="sendBtn" onclick="sendMessage()">
                     <i class="fas fa-paper-plane"></i>
                 </button>
             </div>
@@ -360,64 +496,133 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Prism.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
     
     <script>
-        // Bot responses database
-        const botResponses = {
-            greetings: [
-                "Hello! I'm USTAZ BOT, ready to help you with your coding journey! 🚀",
-                "Hi there! What coding challenge can I help you solve today? 💻",
-                "Welcome! I'm here to assist you with programming questions and guidance! 👨‍💻"
-            ],
-            courses: {
-                general: "We offer three main courses:\n\n🌐 **Full-Stack Web Development** ($99/month)\n- HTML, CSS, JavaScript, React, Node.js, MongoDB\n- 6 months, 10+ projects\n\n🐍 **Python & Data Science** ($89/month)\n- Python, Pandas, NumPy, Machine Learning\n- 4 months, 8+ projects\n\n📱 **Mobile App Development** ($109/month)\n- Flutter, Dart, Firebase\n- 5 months, 6+ apps\n\nWhich course interests you most?",
-                web: "Our **Full-Stack Web Development** course covers:\n\n**Frontend:**\n- HTML5 & CSS3\n- JavaScript (ES6+)\n- React.js\n\n**Backend:**\n- Node.js & Express\n- MongoDB\n- RESTful APIs\n- Authentication\n\n**Deployment:**\n- Heroku, Netlify\n\nDuration: 6 months with 10+ real projects! 🚀",
-                python: "Our **Python & Data Science** course includes:\n\n**Core Python:**\n- Syntax & OOP\n- Data structures\n\n**Data Science:**\n- Pandas & NumPy\n- Matplotlib & Seaborn\n- Machine Learning basics\n\n**Practical Skills:**\n- Web scraping\n- Automation scripts\n\nDuration: 4 months with 8+ projects! 🐍",
-                mobile: "Our **Mobile App Development** course covers:\n\n**Flutter & Dart:**\n- Cross-platform development\n- UI/UX design\n- State management\n\n**Backend Integration:**\n- Firebase\n- REST APIs\n- Local storage\n\n**Publishing:**\n- Google Play Store\n- Apple App Store\n\nDuration: 5 months with 6+ apps! 📱"
-            },
-            debugging: [
-                "I'd love to help you debug! 🐛\n\nPlease share:\n1. What programming language?\n2. What's the error message?\n3. What were you trying to do?\n4. Your code snippet (if possible)\n\nCommon debugging tips:\n- Check syntax errors\n- Verify variable names\n- Use console.log() for JavaScript\n- Check indentation in Python",
-                "Debugging can be tricky! Here's my systematic approach:\n\n1. **Read the error message carefully**\n2. **Check the line number mentioned**\n3. **Verify syntax and spelling**\n4. **Use print/console statements**\n5. **Test with smaller inputs**\n\nWhat specific issue are you facing?"
-            ],
-            javascript: {
-                promises: "**JavaScript Promises** are objects representing eventual completion of an async operation! 🔄\n\n```javascript\n// Creating a Promise\nconst myPromise = new Promise((resolve, reject) => {\n  setTimeout(() => {\n    resolve('Success!');\n  }, 1000);\n});\n\n// Using the Promise\nmyPromise\n  .then(result => console.log(result))\n  .catch(error => console.log(error));\n```\n\n**Key concepts:**\n- **Pending**: Initial state\n- **Fulfilled**: Operation completed successfully\n- **Rejected**: Operation failed\n\nWant to learn about async/await too?",
-                functions: "**JavaScript Functions** are reusable blocks of code! 🔧\n\n```javascript\n// Function Declaration\nfunction greet(name) {\n  return `Hello, ${name}!`;\n}\n\n// Arrow Function\nconst greet = (name) => `Hello, ${name}!`;\n\n// Function Expression\nconst greet = function(name) {\n  return `Hello, ${name}!`;\n};\n```\n\n**Key points:**\n- Functions can take parameters\n- They can return values\n- Arrow functions have shorter syntax\n- Functions are first-class objects in JS",
-                loops: "**JavaScript Loops** help repeat code efficiently! 🔄\n\n```javascript\n// For Loop\nfor (let i = 0; i < 5; i++) {\n  console.log(i);\n}\n\n// While Loop\nlet count = 0;\nwhile (count < 5) {\n  console.log(count);\n  count++;\n}\n\n// For...of Loop (arrays)\nconst fruits = ['apple', 'banana', 'orange'];\nfor (const fruit of fruits) {\n  console.log(fruit);\n}\n\n// For...in Loop (objects)\nconst person = {name: 'John', age: 30};\nfor (const key in person) {\n  console.log(key, person[key]);\n}\n```"
-            },
-            python: {
-                basics: "**Python Basics** - Let's start your journey! 🐍\n\n```python\n# Variables\nname = \"USTAZ BOT\"\nage = 1\nis_helpful = True\n\n# Print statement\nprint(f\"Hello, I'm {name}!\")\n\n# Lists\nfruits = ['apple', 'banana', 'orange']\nprint(fruits[0])  # apple\n\n# Dictionaries\nperson = {'name': 'John', 'age': 30}\nprint(person['name'])  # John\n\n# Functions\ndef greet(name):\n    return f\"Hello, {name}!\"\n\nprint(greet(\"Student\"))\n```\n\nWhat specific Python topic would you like to explore?",
-                loops: "**Python Loops** make repetition easy! 🔄\n\n```python\n# For loop with range\nfor i in range(5):\n    print(i)  # 0, 1, 2, 3, 4\n\n# For loop with list\nfruits = ['apple', 'banana', 'orange']\nfor fruit in fruits:\n    print(fruit)\n\n# While loop\ncount = 0\nwhile count < 5:\n    print(count)\n    count += 1\n\n# List comprehension (advanced)\nsquares = [x**2 for x in range(5)]\nprint(squares)  # [0, 1, 4, 9, 16]\n```\n\nPython loops are very readable and powerful!"
-            },
-            projects: {
-                beginner: "**Beginner Project Ideas** 🚀\n\n**Web Development:**\n- Personal portfolio website\n- To-do list app\n- Weather app using API\n- Simple calculator\n\n**Python:**\n- Number guessing game\n- Password generator\n- Basic web scraper\n- File organizer script\n\n**General:**\n- Rock, Paper, Scissors game\n- Unit converter\n- Simple chatbot\n- Expense tracker\n\nWhich type of project interests you most?",
-                intermediate: "**Intermediate Project Ideas** 💪\n\n**Web Development:**\n- E-commerce website\n- Social media dashboard\n- Real-time chat application\n- Blog with CMS\n\n**Python:**\n- Data visualization dashboard\n- Machine learning model\n- API with Flask/Django\n- Automated testing suite\n\n**Mobile:**\n- Expense tracking app\n- Fitness tracker\n- Recipe finder app\n- Local business directory\n\nReady to challenge yourself?"
-            },
-            help: "I can help you with:\n\n🔧 **Debugging & Problem Solving**\n- Error analysis\n- Code review\n- Best practices\n\n📚 **Learning Resources**\n- Course information\n- Concept explanations\n- Practice exercises\n\n💡 **Programming Concepts**\n- JavaScript, Python, HTML/CSS\n- Data structures & algorithms\n- Web development\n\n🚀 **Project Guidance**\n- Project ideas\n- Architecture advice\n- Technology recommendations\n\nWhat specific area would you like help with?"
-        };
-
-        // Initialize chat
+        // Session management
+        let sessionId = localStorage.getItem('ustaz-bot-session') || generateSessionId();
         let messageCount = 0;
+        let isTyping = false;
+
+        function generateSessionId() {
+            const id = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('ustaz-bot-session', id);
+            return id;
+        }
+
+        // Update session info
+        document.getElementById('sessionInfo').textContent = `Session: ${sessionId.slice(-8)}`;
+
+        // API integration
+        async function callUstazBotAPI(message) {
+            try {
+                const response = await fetch('/.netlify/functions/ustaz-bot/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message,
+                        sessionId,
+                        userId: localStorage.getItem('userId') || null
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                return data.response;
+            } catch (error) {
+                console.error('API Error:', error);
+                return generateFallbackResponse(message);
+            }
+        }
+
+        // Fallback response for offline mode
+        function generateFallbackResponse(message) {
+            return `
+## 🤖 **USTAZ BOT Professional Response**
+
+I understand you're asking about: "${message}"
+
+While I'm currently processing your request, here's what I can tell you:
+
+### 💡 **General Guidance:**
+- For coding questions, please provide specific code snippets and error messages
+- For career advice, let me know your current experience level and goals
+- For debugging help, include the programming language and context
+
+### 🎓 **CODEWITHUSTAZ Resources:**
+Consider our structured courses for comprehensive learning:
+- **Full-Stack Web Development** - ₦5,000
+- **Python & Data Science** - ₦5,000
+- **Mobile App Development** - ₦5,000
+- **Cybersecurity** - ₦5,000
+
+### 📞 **Contact Information:**
+- **WhatsApp**: 08168985912
+- **Email**: zaiddigitalacademy@gmail.com
+
+**Please try asking your question again, and I'll provide a more detailed response!**
+
+**USTAZ DIGITALS is always here for you.** 🚀
+            `;
+        }
 
         // Send message function
-        function sendMessage() {
+        async function sendMessage() {
             const input = document.getElementById('messageInput');
+            const sendBtn = document.getElementById('sendBtn');
             const message = input.value.trim();
             
-            if (message === '') return;
+            if (message === '' || isTyping) return;
+            
+            // Disable input during processing
+            isTyping = true;
+            sendBtn.disabled = true;
+            input.disabled = true;
             
             // Add user message
             addMessage(message, 'user');
             input.value = '';
             
-            // Show typing indicator
-            showTyping();
+            // Show AI thinking indicator
+            showAIThinking();
             
-            // Generate bot response
-            setTimeout(() => {
+            try {
+                // Call backend API
+                const response = await callUstazBotAPI(message);
+                
+                // Hide thinking indicator and show typing
+                hideAIThinking();
+                showTyping();
+                
+                // Simulate processing time for better UX
+                setTimeout(() => {
+                    hideTyping();
+                    addMessage(response, 'bot');
+                    
+                    // Re-enable input
+                    isTyping = false;
+                    sendBtn.disabled = false;
+                    input.disabled = false;
+                    input.focus();
+                }, 1500 + Math.random() * 2000);
+                
+            } catch (error) {
+                hideAIThinking();
                 hideTyping();
-                const response = generateResponse(message);
-                addMessage(response, 'bot');
-            }, 1000 + Math.random() * 2000);
+                addMessage('I apologize, but I encountered an error processing your request. Please try again.', 'bot');
+                
+                isTyping = false;
+                sendBtn.disabled = false;
+                input.disabled = false;
+                input.focus();
+            }
         }
 
         // Send quick message
@@ -433,14 +638,19 @@
             messageDiv.className = `message ${sender}`;
             
             const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const messageId = 'msg_' + Date.now();
             
             messageDiv.innerHTML = `
                 <div class="message-avatar">
                     ${sender === 'bot' ? '<i class="fas fa-robot"></i>' : '<i class="fas fa-user"></i>'}
                 </div>
-                <div class="message-content">
+                <div class="message-content" id="${messageId}">
                     <div>${formatMessage(content)}</div>
-                    <div class="message-time">${time}</div>
+                    <div class="message-time">
+                        <i class="fas fa-clock"></i>
+                        ${time}
+                        ${sender === 'bot' ? '<i class="fas fa-check-circle text-success ms-2"></i>' : ''}
+                    </div>
                 </div>
             `;
             
@@ -451,14 +661,40 @@
             // Scroll to bottom
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
             messageCount++;
+            
+            // Highlight code blocks
+            if (sender === 'bot') {
+                setTimeout(() => {
+                    Prism.highlightAllUnder(document.getElementById(messageId));
+                }, 100);
+            }
         }
 
-        // Format message with markdown-like syntax
+        // Format message with enhanced markdown support
         function formatMessage(content) {
             return content
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                .replace(/```([\s\S]*?)```/g, '<div class="code-block">$1</div>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/`([^`]+)`/g, '<code style="background: #f1f3f4; padding: 2px 6px; border-radius: 4px; font-family: monospace;">$1</code>')
+                .replace(/```([\s\S]*?)```/g, '<div class="code-block"><pre><code>$1</code></pre></div>')
+                .replace(/### (.*?)$/gm, '<h4>$1</h4>')
+                .replace(/## (.*?)$/gm, '<h3>$1</h3>')
+                .replace(/# (.*?)$/gm, '<h2>$1</h2>')
+                .replace(/^\- (.*?)$/gm, '<li>$1</li>')
+                .replace(/^\d+\. (.*?)$/gm, '<li>$1</li>')
                 .replace(/\n/g, '<br>');
+        }
+
+        // Show AI thinking indicator
+        function showAIThinking() {
+            document.getElementById('aiThinking').style.display = 'flex';
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Hide AI thinking indicator
+        function hideAIThinking() {
+            document.getElementById('aiThinking').style.display = 'none';
         }
 
         // Show typing indicator
@@ -473,92 +709,6 @@
             document.querySelector('#typingIndicator .typing-indicator').style.display = 'none';
         }
 
-        // Generate bot response
-        function generateResponse(message) {
-            const msg = message.toLowerCase();
-            
-            // Greetings
-            if (msg.includes('hello') || msg.includes('hi') || msg.includes('hey')) {
-                return botResponses.greetings[Math.floor(Math.random() * botResponses.greetings.length)];
-            }
-            
-            // Courses
-            if (msg.includes('course') || msg.includes('learn') || msg.includes('study')) {
-                if (msg.includes('web') || msg.includes('html') || msg.includes('css') || msg.includes('react')) {
-                    return botResponses.courses.web;
-                } else if (msg.includes('python') || msg.includes('data')) {
-                    return botResponses.courses.python;
-                } else if (msg.includes('mobile') || msg.includes('app') || msg.includes('flutter')) {
-                    return botResponses.courses.mobile;
-                } else {
-                    return botResponses.courses.general;
-                }
-            }
-            
-            // Debugging
-            if (msg.includes('debug') || msg.includes('error') || msg.includes('bug') || msg.includes('fix')) {
-                return botResponses.debugging[Math.floor(Math.random() * botResponses.debugging.length)];
-            }
-            
-            // JavaScript concepts
-            if (msg.includes('javascript') || msg.includes('js')) {
-                if (msg.includes('promise') || msg.includes('async')) {
-                    return botResponses.javascript.promises;
-                } else if (msg.includes('function')) {
-                    return botResponses.javascript.functions;
-                } else if (msg.includes('loop')) {
-                    return botResponses.javascript.loops;
-                }
-            }
-            
-            // Python concepts
-            if (msg.includes('python')) {
-                if (msg.includes('basic') || msg.includes('start')) {
-                    return botResponses.python.basics;
-                } else if (msg.includes('loop')) {
-                    return botResponses.python.loops;
-                }
-            }
-            
-            // Projects
-            if (msg.includes('project') || msg.includes('build') || msg.includes('create')) {
-                if (msg.includes('beginner') || msg.includes('easy') || msg.includes('simple')) {
-                    return botResponses.projects.beginner;
-                } else {
-                    return botResponses.projects.intermediate;
-                }
-            }
-            
-            // Help
-            if (msg.includes('help') || msg.includes('what can you do')) {
-                return botResponses.help;
-            }
-            
-            // Default responses
-            const defaultResponses = [
-                "That's an interesting question! 🤔 Could you provide more details so I can give you a better answer?\n\nTry asking about:\n• Specific coding problems\n• Course information\n• Programming concepts\n• Project ideas",
-                "I'd love to help you with that! Can you be more specific about what you're trying to achieve?\n\nI can assist with:\n• JavaScript, Python, HTML/CSS\n• Debugging and problem-solving\n• Course recommendations\n• Career guidance",
-                "Great question! 💡 For the best assistance, could you tell me:\n• What programming language?\n• What specific problem you're facing?\n• What you've tried so far?\n\nI'm here to help you succeed! 🚀",
-                "I'm here to help! 🚀 Try asking about:\n• **Coding Problems**: Debug errors, explain concepts\n• **Courses**: Learn about our programs\n• **Projects**: Get ideas and guidance\n• **Career**: Tips for becoming a developer",
-                "Hmm, I want to make sure I give you the most helpful answer! Could you rephrase your question or provide more context?\n\n**Popular topics:**\n• Web Development\n• Python Programming\n• Mobile Apps\n• Career Advice"
-            ];
-            
-            // Add some intelligence based on keywords
-            if (msg.includes('career') || msg.includes('job') || msg.includes('work')) {
-                return "Great question about tech careers! 💼\n\n**Popular Career Paths:**\n• **Frontend Developer** - HTML, CSS, JavaScript, React\n• **Backend Developer** - Node.js, Python, Databases\n• **Full-Stack Developer** - Both frontend and backend\n• **Mobile Developer** - Flutter, React Native\n• **Data Scientist** - Python, Machine Learning\n\n**Tips for Success:**\n1. Build a strong portfolio with real projects\n2. Contribute to open source projects\n3. Network with other developers\n4. Keep learning new technologies\n5. Practice coding challenges\n\nOur courses can help you get started! Which career path interests you most?";
-            }
-            
-            if (msg.includes('salary') || msg.includes('pay') || msg.includes('money')) {
-                return "Tech salaries in Nigeria vary by experience and location! 💰\n\n**Entry Level (0-2 years):**\n• Frontend Developer: ₦150k - ₦400k/month\n• Backend Developer: ₦200k - ₦500k/month\n• Full-Stack Developer: ₦250k - ₦600k/month\n\n**Mid Level (2-5 years):**\n• Senior Developer: ₦500k - ₦1.2M/month\n• Tech Lead: ₦800k - ₦1.5M/month\n\n**Senior Level (5+ years):**\n• Principal Engineer: ₦1M - ₦3M/month\n• CTO/VP Engineering: ₦2M+/month\n\n**Remote/International:**\n• Can earn $2k - $10k+ USD/month\n\n*Note: Salaries depend on skills, company, and location. Building strong skills is key!*";
-            }
-            
-            if (msg.includes('time') || msg.includes('how long') || msg.includes('duration')) {
-                return "Learning timelines depend on your goals and dedication! ⏰\n\n**To Get Job-Ready:**\n• **Web Development**: 6-12 months (with our course: 6 months)\n• **Python Programming**: 4-8 months (with our course: 4 months)\n• **Mobile Development**: 6-10 months (with our course: 5 months)\n\n**Study Schedule Recommendations:**\n• **Part-time**: 2-3 hours/day, 5 days/week\n• **Full-time**: 6-8 hours/day, 6 days/week\n• **Weekend**: 8-10 hours/day, 2 days/week\n\n**Success Factors:**\n✅ Consistent daily practice\n✅ Building real projects\n✅ Getting feedback from mentors\n✅ Joining coding communities\n\nOur structured courses can accelerate your learning! Which path interests you?";
-            }
-            
-            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
-        }
-
         // Go back to main site
         function goBack() {
             window.location.href = 'index.html';
@@ -566,13 +716,19 @@
 
         // Enter key to send message
         document.getElementById('messageInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
+            if (e.key === 'Enter' && !isTyping) {
                 sendMessage();
             }
         });
 
         // Auto-focus input
         document.getElementById('messageInput').focus();
+
+        // Load conversation history on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // You can implement history loading here if needed
+            console.log('USTAZ BOT initialized with session:', sessionId);
+        });
     </script>
 </body>
 </html>
