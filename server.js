@@ -70,12 +70,40 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Database connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/codewithustaz-lms', {
+const connectDB = async () => {
+  try {
+    const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/codewithustaz-lms';
+    
+    if (!process.env.MONGODB_URI) {
+      console.log('⚠️  Warning: MONGODB_URI not set in environment variables');
+      console.log('📝 Please set up MongoDB Atlas or local MongoDB server');
+      console.log('🔗 For MongoDB Atlas: https://www.mongodb.com/atlas');
+      console.log('💡 Add MONGODB_URI to your .env file or deployment environment');
+    }
+    
+    await mongoose.connect(mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-})
-.then(() => console.log('✅ Connected to MongoDB'))
-.catch(err => console.error('❌ MongoDB connection error:', err));
+      serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+      socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+    });
+    
+    console.log('✅ Connected to MongoDB');
+  } catch (err) {
+    console.error('❌ MongoDB connection error:', err.message);
+    console.log('\n🔧 To fix this error:');
+    console.log('1. Set up MongoDB Atlas (free): https://www.mongodb.com/atlas');
+    console.log('2. Get your connection string');
+    console.log('3. Add MONGODB_URI to your .env file');
+    console.log('4. Example: MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/codewithustaz-lms');
+    
+    // Don't exit the process, just log the error
+    console.log('⚠️  Server will continue without database connection');
+  }
+};
+
+// Connect to database
+connectDB();
 
 // Socket.io for real-time features
 io.on('connection', (socket) => {
