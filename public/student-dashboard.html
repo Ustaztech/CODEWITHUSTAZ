@@ -298,6 +298,17 @@
 
         async function loadDashboard() {
             try {
+                // Show fallback notice if using fallback mode
+                if (window.lmsClient && window.lmsClient.isFallbackMode()) {
+                    const notice = document.createElement('div');
+                    notice.className = 'alert alert-info';
+                    notice.innerHTML = `
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Demo Mode:</strong> Running with local data. Full features available when database is connected.
+                    `;
+                    document.querySelector('.container').insertBefore(notice, document.querySelector('.container').firstChild);
+                }
+                
                 const data = await window.lmsClient.getDashboard();
                 
                 // Update welcome text
