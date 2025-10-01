@@ -1,186 +1,187 @@
 @@ .. @@
      <!-- Custom JavaScript -->
      <script>
-+        // Load dynamic API
-+        const script = document.createElement('script');
-+        script.src = '/js/dynamic-api.js';
-+        document.head.appendChild(script);
-+        
+        // Load dynamic API
+        const script = document.createElement('script');
+        script.src = '/js/dynamic-api.js';
+        document.head.appendChild(script);
+        
          // Course Modal Data
          const courses = {
 @@ .. @@
-         // Form Submission
-         document.getElementById('contactForm').addEventListener('submit', function(e) {
-             e.preventDefault();
-             
--            // Get form data
--            const formData = new FormData(this);
-             const name = this.querySelector('input[placeholder="Your Name"]').value;
-             const email = this.querySelector('input[placeholder="Your Email"]').value;
-             const subject = this.querySelector('input[placeholder="Subject"]').value;
-             const message = this.querySelector('textarea').value;
-             
--            // Simulate sending email (in real app, this would send to backend)
-+            // Send to backend email service
-             const emailBody = `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}`;
-             const mailtoLink = `mailto:zaiddigitalacademy@gmail.com?subject=${encodeURIComponent(subject || 'Contact Form Submission')}&body=${encodeURIComponent(emailBody)}`;
-             
+        // Form Submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = this.querySelector('input[placeholder="Your Name"]').value;
+            const email = this.querySelector('input[placeholder="Your Email"]').value;
+            const subject = this.querySelector('input[placeholder="Subject"]').value;
+            const message = this.querySelector('textarea').value;
+            
+            // Send to backend email service
+            const emailBody = `Name: ${name}\nEmail: ${email}\nSubject: ${subject}\nMessage: ${message}`;
+            const mailtoLink = `mailto:zaiddigitalacademy@gmail.com?subject=${encodeURIComponent(subject || 'Contact Form Submission')}&body=${encodeURIComponent(emailBody)}`;
+            
 @@ -2068,6 +2076,25 @@
-             this.reset();
-         });
-         
-+        // Dynamic Admission Application
-+        function submitAdmissionApplication() {
-+            // This would be called from admission form
-+            const applicationData = {
-+                firstName: 'John',
-+                lastName: 'Doe',
-+                email: 'john@example.com',
-+                phone: '08012345678',
-+                course: 'web-dev'
-+                // ... other fields
-+            };
-+            
-+            window.dynamicAPI.submitApplication(applicationData)
-+                .then(response => {
-+                    alert('Application submitted! Please make payment of ₦1,000 and send proof to WhatsApp: 08168985912');
-+                })
-+                .catch(error => alert('Error: ' + error.message));
-+        }
-+        
-         // Newsletter subscription
-         document.querySelector('footer form').addEventListener('submit', function(e) {
-             e.preventDefault();
+            this.reset();
+        });
+        
+        // Dynamic Admission Application
+        function submitAdmissionApplication() {
+            // This would be called from admission form
+            const applicationData = {
+                firstName: 'John',
+                lastName: 'Doe',
+                email: 'john@example.com',
+                phone: '08012345678',
+                course: 'web-dev'
+                // ... other fields
+            };
+            
+            window.dynamicAPI.submitApplication(applicationData)
+                .then(response => {
+                    alert('Application submitted! Please make payment of ₦1,000 and send proof to WhatsApp: 08168985912');
+                })
+                .catch(error => alert('Error: ' + error.message));
+        }
+        
+        // Newsletter subscription
+        document.querySelector('footer form').addEventListener('submit', function(e) {
+            e.preventDefault();
 @@ .. @@
-                     <li class="nav-item">
-                         <a class="nav-link" href="#courses">Courses</a>
-                     </li>
-+                    <li class="nav-item dropdown">
-+                        <a class="nav-link dropdown-toggle" href="#" id="professionalCoursesDropdown" role="button" data-bs-toggle="dropdown">
-+                            GET PROFESSIONAL COURSES
-+                        </a>
-+                        <ul class="dropdown-menu">
-+                            <li><a class="dropdown-item" href="#professional-courses">Advanced Web Development</a></li>
-+                            <li><a class="dropdown-item" href="#professional-courses">Data Science & Analytics</a></li>
-+                            <li><a class="dropdown-item" href="#professional-courses">Advanced Cybersecurity</a></li>
-+                            <li><a class="dropdown-item" href="#professional-courses">Professional Mobile Development</a></li>
-+                            <li><a class="dropdown-item" href="#professional-courses">Cloud Computing & DevOps</a></li>
-+                            <li><a class="dropdown-item" href="#professional-courses">UI/UX Design Mastery</a></li>
-+                            <li><hr class="dropdown-divider"></li>
-+                            <li><a class="dropdown-item" href="https://wa.me/2348168985912">
-+                                <i class="fab fa-whatsapp text-success me-2"></i>Contact for Info
-+                            </a></li>
-+                        </ul>
-+                    </li>
-                     <li class="nav-item">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#courses">Courses</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="professionalCoursesDropdown" role="button" data-bs-toggle="dropdown">
+                            GET PROFESSIONAL COURSES
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#professional-courses">Advanced Web Development</a></li>
+                            <li><a class="dropdown-item" href="#professional-courses">Data Science & Analytics</a></li>
+                            <li><a class="dropdown-item" href="#professional-courses">Advanced Cybersecurity</a></li>
+                            <li><a class="dropdown-item" href="#professional-courses">Professional Mobile Development</a></li>
+                            <li><a class="dropdown-item" href="#professional-courses">Cloud Computing & DevOps</a></li>
+                            <li><a class="dropdown-item" href="#professional-courses">UI/UX Design Mastery</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="https://wa.me/2348168985912">
+                                <i class="fab fa-whatsapp text-success me-2"></i>Contact for Info
+                            </a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/ustaz-bot.html">
+                            <i class="fas fa-robot me-1"></i>USTAZ BOT
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/student-dashboard.html">
+                            <i class="fas fa-graduation-cap me-1"></i>Dashboard
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex gap-2">
+                    <a href="/login.html" class="btn btn-outline-light">Login</a>
+                    <a href="/register.html" class="btn btn-primary">Register</a>
+                </div>
+            </div>
+        </div>
 @@ .. @@
-                 <div class="col-lg-4 col-md-6">
-                     <div class="youtube-card">
-                         <div class="youtube-thumbnail">
--                            <img src="https://img.youtube.com/vi/SSqPsSMEiCI/maxresdefault.jpg" alt="ChatGPT Pro Tutorial">
--                            <div class="play-button" onclick="openYouTube('SSqPsSMEiCI')">
-+                            <img src="https://img.youtube.com/vi/umM8zgTcQFc/maxresdefault.jpg" alt="Pinterest Ideas Tutorial">
-+                            <div class="play-button" onclick="openYouTube('umM8zgTcQFc')">
-                                 <i class="fas fa-play"></i>
-                             </div>
-                         </div>
-                         <div class="p-3">
--                            <h5>UNLOCK ACCESS TO CHATGPT PRO FOR FREE</h5>
--                            <p class="text-muted small">Learn how to access ChatGPT Pro features without paying.</p>
-+                            <h5>HOW TO USE PINTEREST FOR IDEAS</h5>
-+                            <p class="text-muted small">Learn how to find creative ideas using Pinterest effectively.</p>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="col-lg-4 col-md-6">
-                     <div class="youtube-card">
-                         <div class="youtube-thumbnail">
--                            <img src="https://img.youtube.com/vi/brV2V99LxJY/maxresdefault.jpg" alt="Canva Pro Tutorial">
--                            <div class="play-button" onclick="openYouTube('brV2V99LxJY')">
-+                            <img src="https://img.youtube.com/vi/6FKOFhi0Bk4/maxresdefault.jpg" alt="Canva Flyer Tutorial 1">
-+                            <div class="play-button" onclick="openYouTube('6FKOFhi0Bk4')">
-                                 <i class="fas fa-play"></i>
-                             </div>
-                         </div>
-                         <div class="p-3">
--                            <h5>HOW TO GET CANVA PRO FOR FREE</h5>
--                            <p class="text-muted small">Step-by-step guide to unlock Canva Pro features.</p>
-+                            <h5>HOW TO CREATE FLYER WITH CANVA 1</h5>
-+                            <p class="text-muted small">Step-by-step guide to creating professional flyers with Canva.</p>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="col-lg-4 col-md-6">
-                     <div class="youtube-card">
-                         <div class="youtube-thumbnail">
--                            <img src="https://img.youtube.com/vi/1Onw8W1Krpc/maxresdefault.jpg" alt="Behind the Brand">
--                            <div class="play-button" onclick="openYouTube('1Onw8W1Krpc')">
-+                            <img src="https://img.youtube.com/vi/Fc2kVnHzFoc/maxresdefault.jpg" alt="Canva Flyer Tutorial 2">
-+                            <div class="play-button" onclick="openYouTube('Fc2kVnHzFoc')">
-                                 <i class="fas fa-play"></i>
-                             </div>
-                         </div>
-                         <div class="p-3">
--                            <h5>THIS IS ME BEHIND THE BRAND</h5>
--                            <p class="text-muted small">Get to know the founder and the story behind Code With Ustaz.</p>
-+                            <h5>HOW TO CREATE FLYER WITH CANVA 2</h5>
-+                            <p class="text-muted small">Advanced flyer design techniques using Canva.</p>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="col-lg-4 col-md-6">
-                     <div class="youtube-card">
-                         <div class="youtube-thumbnail">
--                            <img src="https://img.youtube.com/vi/8ivNjJts7bQ/maxresdefault.jpg" alt="AI Videos Tutorial">
--                            <div class="play-button" onclick="openYouTube('8ivNjJts7bQ')">
-+                            <img src="https://img.youtube.com/vi/Nx99D9nc4BE/maxresdefault.jpg" alt="Canva Logo Tutorial">
-+                            <div class="play-button" onclick="openYouTube('Nx99D9nc4BE')">
-                                 <i class="fas fa-play"></i>
-                             </div>
-                         </div>
-                         <div class="p-3">
--                            <h5>HOW TO CREATE AI VIDEOS IN MINUTES</h5>
--                            <p class="text-muted small">Master AI video creation with simple tools and techniques.</p>
-+                            <h5>HOW TO CREATE A SIMPLE LOGO WITH CANVA</h5>
-+                            <p class="text-muted small">Learn to design professional logos using Canva tools.</p>
-                         </div>
-                     </div>
-                 </div>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="#courses" class="btn btn-primary btn-lg">Explore Courses</a>
+                        <a href="/register.html" class="btn btn-outline-light btn-lg">Free Trial</a>
+                        <a href="/ustaz-bot.html" class="btn btn-success btn-lg">
+                            <i class="fas fa-robot me-2"></i>Chat with USTAZ BOT
+                        </a>
+                        <a href="/student-dashboard.html" class="btn btn-warning btn-lg">
+                            <i class="fas fa-graduation-cap me-2"></i>Student Dashboard
+                        </a>
+                    </div>
+                </div>
 @@ .. @@
-             <div class="text-center mt-4">
--                <a href="https://youtube.com/@codewithustaz" class="btn btn-danger btn-lg">
-+                <a href="https://youtube.com/@ustazdigitalacademy001?si=tr-HhkAQM9xlw2Wq" class="btn btn-danger btn-lg">
-                     <i class="fab fa-youtube me-2"></i>Subscribe to Our Channel
-                 </a>
-             </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="youtube-card">
+                        <div class="youtube-thumbnail">
+                            <img src="https://img.youtube.com/vi/umM8zgTcQFc/maxresdefault.jpg" alt="Pinterest Ideas Tutorial">
+                            <div class="play-button" onclick="openYouTube('umM8zgTcQFc')">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <h5>HOW TO USE PINTEREST FOR IDEAS</h5>
+                            <p class="text-muted small">Learn how to find creative ideas using Pinterest effectively.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="youtube-card">
+                        <div class="youtube-thumbnail">
+                            <img src="https://img.youtube.com/vi/6FKOFhi0Bk4/maxresdefault.jpg" alt="Canva Flyer Tutorial 1">
+                            <div class="play-button" onclick="openYouTube('6FKOFhi0Bk4')">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <h5>HOW TO CREATE FLYER WITH CANVA 1</h5>
+                            <p class="text-muted small">Step-by-step guide to creating professional flyers with Canva.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="youtube-card">
+                        <div class="youtube-thumbnail">
+                            <img src="https://img.youtube.com/vi/Fc2kVnHzFoc/maxresdefault.jpg" alt="Canva Flyer Tutorial 2">
+                            <div class="play-button" onclick="openYouTube('Fc2kVnHzFoc')">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <h5>HOW TO CREATE FLYER WITH CANVA 2</h5>
+                            <p class="text-muted small">Advanced flyer design techniques using Canva.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="youtube-card">
+                        <div class="youtube-thumbnail">
+                            <img src="https://img.youtube.com/vi/Nx99D9nc4BE/maxresdefault.jpg" alt="Canva Logo Tutorial">
+                            <div class="play-button" onclick="openYouTube('Nx99D9nc4BE')">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="p-3">
+                            <h5>HOW TO CREATE A SIMPLE LOGO WITH CANVA</h5>
+                            <p class="text-muted small">Learn to design professional logos using Canva tools.</p>
+                        </div>
+                    </div>
+                </div>
 @@ .. @@
-                     <div class="social-icons mt-4">
--                        <a href="#"><i class="fab fa-facebook-f"></i></a>
--                        <a href="#"><i class="fab fa-twitter"></i></a>
--                        <a href="#"><i class="fab fa-instagram"></i></a>
--                        <a href="https://youtube.com/@codewithustaz"><i class="fab fa-youtube"></i></a>
--                        <a href="#"><i class="fab fa-github"></i></a>
-+                        <a href="https://www.facebook.com/thedigitalustaz"><i class="fab fa-facebook-f"></i></a>
-+                        <a href="https://x.com/ust_l88192?t=n2SzgmS7aHd_JKbEk0I0_Q&s=09"><i class="fab fa-twitter"></i></a>
-+                        <a href="https://www.instagram.com/thedigitalustaz?igsh=YW5iejc4NHJ5bDAy"><i class="fab fa-instagram"></i></a>
-+                        <a href="https://youtube.com/@ustazdigitalacademy001?si=tr-HhkAQM9xlw2Wq"><i class="fab fa-youtube"></i></a>
-+                        <a href="mailto:yahayazaid2021@gmail.com"><i class="fab fa-github"></i></a>
-                     </div>
-                 </div>
+            <div class="text-center mt-4">
+                <a href="https://youtube.com/@ustazdigitalacademy001?si=tr-HhkAQM9xlw2Wq" class="btn btn-danger btn-lg">
+                    <i class="fab fa-youtube me-2"></i>Subscribe to Our Channel
+                </a>
+            </div>
 @@ .. @@
-                         <div class="col-md-6">
-                             <div class="mb-3">
-                                 <label class="form-label">Email Address *</label>
--                                <input type="email" class="form-control" placeholder="Your Email" required>
-+                                <input type="email" class="form-control" placeholder="contact@codewithustaz.com" value="zaiddigitalacademy@gmail.com" readonly>
-                             </div>
-                         </div>
-                     </div>
+                    <div class="social-icons mt-4">
+                        <a href="https://www.facebook.com/thedigitalustaz"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://x.com/ust_l88192?t=n2SzgmS7aHd_JKbEk0I0_Q&s=09"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/thedigitalustaz?igsh=YW5iejc4NHJ5bDAy"><i class="fab fa-instagram"></i></a>
+                        <a href="https://youtube.com/@ustazdigitalacademy001?si=tr-HhkAQM9xlw2Wq"><i class="fab fa-youtube"></i></a>
+                        <a href="mailto:yahayazaid2021@gmail.com"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
 @@ .. @@
-                         <div>
-                             <h5>Email</h5>
--                            <p class="text-muted">contact@codewithustaz.com</p>
-+                            <p class="text-muted">zaiddigitalacademy@gmail.com</p>
-                         </div>
-                     </div>
-                 </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Email Address *</label>
+                                <input type="email" class="form-control" placeholder="contact@codewithustaz.com" value="zaiddigitalacademy@gmail.com" readonly>
+                            </div>
+                        </div>
+                    </div>
+@@ .. @@
+                        <div>
+                            <h5>Email</h5>
+                            <p class="text-muted">zaiddigitalacademy@gmail.com</p>
+                        </div>
+                    </div>
+                </div>

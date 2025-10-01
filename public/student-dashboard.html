@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - CODEWITHUSTAZ</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --light-color: #f8f9fa;
+            --dark-color: #1a1a2e;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-color);
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, var(--dark-color), var(--secondary-color));
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            margin: 0 auto 15px;
+        }
+
+        .course-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background: #e9ecef;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success-color), var(--primary-color));
+            transition: width 0.3s;
+        }
+
+        .lesson-item {
+            padding: 15px;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lesson-item:hover {
+            background: var(--light-color);
+            border-color: var(--primary-color);
+        }
+
+        .lesson-item.completed {
+            background: rgba(39, 174, 96, 0.1);
+            border-color: var(--success-color);
+        }
+
+        .quiz-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .quiz-option {
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-color);
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--primary-color);
+            background: rgba(52, 152, 219, 0.2);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success-color);
+            background: rgba(39, 174, 96, 0.2);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--danger-color);
+            background: rgba(231, 76, 60, 0.2);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .spinner-border {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap me-2"></i>CODEWITHUSTAZ
+            </a>
+            <div class="navbar-nav ms-auto">
+                <span class="navbar-text me-3" id="welcomeText">Welcome, Student!</span>
+                <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                    <i class="fas fa-sign-out-alt me-1"></i>Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <!-- Loading State -->
+        <div id="loadingState" class="loading">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3">Loading your dashboard...</p>
+        </div>
+
+        <!-- Dashboard Content -->
+        <div id="dashboardContent" style="display: none;">
+            <!-- Statistics Cards -->
+            <div class="row mb-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="dashboard-card stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, var(--primary-color), #2980b9);">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3 id="enrolledCoursesCount">0</h3>
+                        <p class="text-muted">Enrolled Courses</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="dashboard-card stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, var(--success-color), #2ecc71);">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3 id="completedCoursesCount">0</h3>
+                        <p class="text-muted">Completed Courses</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="dashboard-card stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, var(--warning-color), #e67e22);">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3 id="totalTimeSpent">0h</h3>
+                        <p class="text-muted">Time Spent</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="dashboard-card stat-card">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, var(--danger-color), #c0392b);">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <h3 id="currentStreak">0</h3>
+                        <p class="text-muted">Day Streak</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Courses Section -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="dashboard-card">
+                        <h4 class="mb-4">
+                            <i class="fas fa-book-open me-2"></i>Your Courses
+                        </h4>
+                        <div class="row" id="coursesContainer">
+                            <!-- Courses will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Course Detail Modal -->
+        <div class="modal fade" id="courseModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="courseModalTitle">Course Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body" id="courseModalBody">
+                        <!-- Course content will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lesson Modal -->
+        <div class="modal fade" id="lessonModal" tabindex="-1">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="lessonModalTitle">Lesson</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body" id="lessonModalBody">
+                        <!-- Lesson content will be loaded here -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" id="completeLessonBtn" onclick="completeLesson()">
+                            <i class="fas fa-check me-1"></i>Mark as Complete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- LMS Client -->
+    <script src="/js/lms-client.js"></script>
+    
+    <script>
+        let currentCourse = null;
+        let currentLesson = null;
+        let lessonStartTime = null;
+
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!window.lmsClient.isAuthenticated()) {
+                window.location.href = '/login.html';
+                return;
+            }
+            
+            loadDashboard();
+        });
+
+        async function loadDashboard() {
+            try {
+                const data = await window.lmsClient.getDashboard();
+                
+                // Update welcome text
+                document.getElementById('welcomeText').textContent = 
+                    `Welcome, ${data.user.firstName}!`;
+                
+                // Update statistics
+                document.getElementById('enrolledCoursesCount').textContent = data.stats.enrolledCourses;
+                document.getElementById('completedCoursesCount').textContent = data.stats.completedCourses;
+                document.getElementById('totalTimeSpent').textContent = `${Math.round(data.stats.totalTimeSpent / 60)}h`;
+                document.getElementById('currentStreak').textContent = data.stats.currentStreak;
+                
+                // Load courses
+                loadCourses(data.courses);
+                
+                // Hide loading, show content
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('dashboardContent').style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+                alert('Error loading dashboard. Please try again.');
+            }
+        }
+
+        function loadCourses(courses) {
+            const container = document.getElementById('coursesContainer');
+            container.innerHTML = '';
+            
+            courses.forEach(course => {
+                const courseCard = document.createElement('div');
+                courseCard.className = 'col-lg-4 col-md-6 mb-4';
+                courseCard.innerHTML = `
+                    <div class="course-card">
+                        <div class="card-body p-4">
+                            <h5 class="card-title">${course.title}</h5>
+                            <p class="card-text text-muted">${course.description}</p>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <span>Progress</span>
+                                    <span class="fw-bold">${course.progress}%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${course.progress}%"></div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    ${course.completedLessons}/${course.totalLessons} lessons
+                                </small>
+                                <button class="btn btn-primary btn-sm" onclick="openCourse('${course.id}')">
+                                    ${course.progress > 0 ? 'Continue' : 'Start'} Course
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(courseCard);
+            });
+        }
+
+        async function openCourse(courseId) {
+            try {
+                const course = await window.lmsClient.getCourse(courseId);
+                currentCourse = course;
+                
+                document.getElementById('courseModalTitle').textContent = course.title;
+                
+                let modalContent = `
+                    <p class="lead">${course.description}</p>
+                    <h6 class="mt-4">Course Modules:</h6>
+                `;
+                
+                course.modules.forEach(module => {
+                    modalContent += `
+                        <div class="mb-4">
+                            <h6 class="fw-bold">${module.title}</h6>
+                            <div class="ms-3">
+                    `;
+                    
+                    module.lessons.forEach(lesson => {
+                        modalContent += `
+                            <div class="lesson-item" onclick="openLesson('${lesson.id}', '${lesson.title}')">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <i class="fas fa-play-circle me-2"></i>
+                                        ${lesson.title}
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-secondary">${lesson.duration} min</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    modalContent += `
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                document.getElementById('courseModalBody').innerHTML = modalContent;
+                
+                const modal = new bootstrap.Modal(document.getElementById('courseModal'));
+                modal.show();
+                
+            } catch (error) {
+                console.error('Error loading course:', error);
+                alert('Error loading course. Please try again.');
+            }
+        }
+
+        function openLesson(lessonId, lessonTitle) {
+            if (!currentCourse) return;
+            
+            // Find the lesson
+            let lesson = null;
+            for (const module of currentCourse.modules) {
+                const foundLesson = module.lessons.find(l => l.id === lessonId);
+                if (foundLesson) {
+                    lesson = foundLesson;
+                    break;
+                }
+            }
+            
+            if (!lesson) return;
+            
+            currentLesson = lesson;
+            lessonStartTime = Date.now();
+            
+            document.getElementById('lessonModalTitle').textContent = lesson.title;
+            
+            let lessonContent = `
+                <div class="lesson-content">
+                    ${lesson.content}
+                </div>
+            `;
+            
+            if (lesson.quiz) {
+                lessonContent += `
+                    <div class="quiz-container mt-4">
+                        <h5><i class="fas fa-question-circle me-2"></i>Quiz</h5>
+                        <p class="fw-bold">${lesson.quiz.question}</p>
+                        <div id="quizOptions">
+                `;
+                
+                lesson.quiz.options.forEach((option, index) => {
+                    lessonContent += `
+                        <div class="quiz-option" onclick="selectQuizOption(${index})">
+                            ${option}
+                        </div>
+                    `;
+                });
+                
+                lessonContent += `
+                        </div>
+                        <button class="btn btn-primary mt-3" onclick="submitQuiz()" id="submitQuizBtn">
+                            Submit Answer
+                        </button>
+                        <div id="quizResult" class="mt-3" style="display: none;"></div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('lessonModalBody').innerHTML = lessonContent;
+            
+            // Close course modal and open lesson modal
+            const courseModal = bootstrap.Modal.getInstance(document.getElementById('courseModal'));
+            courseModal.hide();
+            
+            const lessonModal = new bootstrap.Modal(document.getElementById('lessonModal'));
+            lessonModal.show();
+        }
+
+        let selectedQuizOption = null;
+
+        function selectQuizOption(index) {
+            selectedQuizOption = index;
+            
+            // Update UI
+            document.querySelectorAll('.quiz-option').forEach((option, i) => {
+                option.classList.remove('selected');
+                if (i === index) {
+                    option.classList.add('selected');
+                }
+            });
+        }
+
+        function submitQuiz() {
+            if (selectedQuizOption === null) {
+                alert('Please select an answer');
+                return;
+            }
+            
+            const quiz = currentLesson.quiz;
+            const isCorrect = selectedQuizOption === quiz.correctAnswer;
+            const score = isCorrect ? 100 : 0;
+            
+            // Update quiz options UI
+            document.querySelectorAll('.quiz-option').forEach((option, i) => {
+                option.style.pointerEvents = 'none';
+                if (i === quiz.correctAnswer) {
+                    option.classList.add('correct');
+                } else if (i === selectedQuizOption && !isCorrect) {
+                    option.classList.add('incorrect');
+                }
+            });
+            
+            // Show result
+            const resultDiv = document.getElementById('quizResult');
+            resultDiv.innerHTML = `
+                <div class="alert ${isCorrect ? 'alert-success' : 'alert-danger'}">
+                    <h6>${isCorrect ? 'Correct!' : 'Incorrect'}</h6>
+                    <p>${quiz.explanation}</p>
+                    <p><strong>Score: ${score}%</strong></p>
+                </div>
+            `;
+            resultDiv.style.display = 'block';
+            
+            // Hide submit button
+            document.getElementById('submitQuizBtn').style.display = 'none';
+            
+            // Store quiz result for completion
+            currentLesson.quizScore = score;
+        }
+
+        async function completeLesson() {
+            if (!currentCourse || !currentLesson) return;
+            
+            const timeSpent = lessonStartTime ? Math.round((Date.now() - lessonStartTime) / 1000 / 60) : 1;
+            
+            try {
+                await window.lmsClient.updateProgress({
+                    courseId: currentCourse.id,
+                    lessonId: currentLesson.id,
+                    completed: true,
+                    timeSpent: timeSpent,
+                    quizScore: currentLesson.quizScore || null
+                });
+                
+                alert('Lesson completed successfully!');
+                
+                // Close lesson modal
+                const lessonModal = bootstrap.Modal.getInstance(document.getElementById('lessonModal'));
+                lessonModal.hide();
+                
+                // Reload dashboard to update progress
+                loadDashboard();
+                
+            } catch (error) {
+                console.error('Error completing lesson:', error);
+                alert('Error completing lesson. Please try again.');
+            }
+        }
+
+        function logout() {
+            window.lmsClient.removeToken();
+            window.location.href = '/index.html';
+        }
+    </script>
+</body>
+</html>

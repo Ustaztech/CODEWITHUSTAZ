@@ -1,0 +1,36 @@
+@@ .. @@
+         // Form Submission
+         document.getElementById('loginForm').addEventListener('submit', function(e) {
+             e.preventDefault();
+-            alert('Login successful! Welcome back to Code With Ustaz!');
+-            window.location.href = 'dashboard.html';
++            
++            const email = this.querySelector('input[type="email"]').value;
++            const password = this.querySelector('input[type="password"]').value;
++            
++            // Show loading state
++            const submitBtn = this.querySelector('button[type="submit"]');
++            const originalText = submitBtn.textContent;
++            submitBtn.textContent = 'Logging in...';
++            submitBtn.disabled = true;
++            
++            // Attempt login
++            window.lmsClient.login(email, password)
++                .then(response => {
++                    alert('Login successful! Welcome back to CODEWITHUSTAZ!');
++                    window.location.href = '/student-dashboard.html';
++                })
++                .catch(error => {
++                    alert('Login failed: ' + error.message);
++                    submitBtn.textContent = originalText;
++                    submitBtn.disabled = false;
++                });
+         });
++        
++        // Load LMS client
++        const script = document.createElement('script');
++        script.src = '/js/lms-client.js';
++        document.head.appendChild(script);
+     </script>
+ </body>
+ </html>

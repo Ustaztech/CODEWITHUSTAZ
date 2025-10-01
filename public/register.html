@@ -1,0 +1,52 @@
+@@ .. @@
+         // Simple Registration
+         document.getElementById('simpleRegForm').addEventListener('submit', function(e) {
+             e.preventDefault();
+-            if (!selectedGender) {
+-                alert('Please select your gender');
+-                return;
+-            }
+-            alert('Account created successfully! Welcome to Code With Ustaz!');
+-            window.location.href = 'dashboard.html';
++            
++            const formData = new FormData(this);
++            const userData = {
++                firstName: formData.get('firstName') || this.querySelector('input[placeholder="First Name"]').value,
++                lastName: formData.get('lastName') || this.querySelector('input[placeholder="Last Name"]').value,
++                email: this.querySelector('input[type="email"]').value,
++                phone: this.querySelector('input[type="tel"]').value,
++                password: this.querySelector('input[type="password"]').value,
++                gender: selectedGender
++            };
++            
++            if (!selectedGender) {
++                alert('Please select your gender');
++                return;
++            }
++            
++            // Show loading state
++            const submitBtn = this.querySelector('button[type="submit"]');
++            const originalText = submitBtn.textContent;
++            submitBtn.textContent = 'Creating Account...';
++            submitBtn.disabled = true;
++            
++            // Attempt registration
++            window.lmsClient.register(userData)
++                .then(response => {
++                    alert('Account created successfully! Welcome to CODEWITHUSTAZ!');
++                    window.location.href = '/student-dashboard.html';
++                })
++                .catch(error => {
++                    alert('Registration failed: ' + error.message);
++                    submitBtn.textContent = originalText;
++                    submitBtn.disabled = false;
++                });
+         });
++        
++        // Load LMS client
++        const script = document.createElement('script');
++        script.src = '/js/lms-client.js';
++        document.head.appendChild(script);
+     </script>
+ </body>
+ </html>
